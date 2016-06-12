@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34A2DB771D0D038B0043CF34 /* TCDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB711D0D038B0043CF34 /* TCDatabase.m */; };
+		34A2DB781D0D038B0043CF34 /* TCDatabaseDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB731D0D038B0043CF34 /* TCDatabaseDAO.m */; };
+		34A2DB791D0D038B0043CF34 /* TCSimpleTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */; };
+		34A2DB7A1D0D038B0043CF34 /* stopWords.txt in Resources */ = {isa = PBXBuildFile; fileRef = 34A2DB761D0D038B0043CF34 /* stopWords.txt */; };
 		34FD725B1CEB46610056112B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD725A1CEB46610056112B /* main.m */; };
 		34FD725E1CEB46610056112B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD725D1CEB46610056112B /* AppDelegate.m */; };
 		34FD72611CEB46610056112B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD72601CEB46610056112B /* ViewController.m */; };
@@ -15,6 +19,7 @@
 		34FD72691CEB46610056112B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34FD72671CEB46610056112B /* LaunchScreen.storyboard */; };
 		34FD72741CEB46610056112B /* TCDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD72731CEB46610056112B /* TCDatabaseTests.m */; };
 		34FD727F1CEB46610056112B /* TCDatabaseUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD727E1CEB46610056112B /* TCDatabaseUITests.m */; };
+		587CE704A2C6B7B2ADD58CCB /* libPods-TCDatabase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8B100E57E3296016AFFC67 /* libPods-TCDatabase.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E57B9F505795062AD3371D0 /* Pods-TCDatabase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCDatabase.release.xcconfig"; path = "Pods/Target Support Files/Pods-TCDatabase/Pods-TCDatabase.release.xcconfig"; sourceTree = "<group>"; };
+		2F8B100E57E3296016AFFC67 /* libPods-TCDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TCDatabase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34A2DB701D0D038B0043CF34 /* TCDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabase.h; sourceTree = "<group>"; };
+		34A2DB711D0D038B0043CF34 /* TCDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDatabase.m; sourceTree = "<group>"; };
+		34A2DB721D0D038B0043CF34 /* TCDatabaseDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabaseDAO.h; sourceTree = "<group>"; };
+		34A2DB731D0D038B0043CF34 /* TCDatabaseDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDatabaseDAO.m; sourceTree = "<group>"; };
+		34A2DB741D0D038B0043CF34 /* TCSimpleTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCSimpleTokenizer.h; sourceTree = "<group>"; };
+		34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCSimpleTokenizer.m; sourceTree = "<group>"; };
+		34A2DB761D0D038B0043CF34 /* stopWords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stopWords.txt; sourceTree = "<group>"; };
 		34FD72561CEB46610056112B /* TCDatabase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCDatabase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34FD725A1CEB46610056112B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		34FD725C1CEB46610056112B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +65,7 @@
 		34FD727A1CEB46610056112B /* TCDatabaseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TCDatabaseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34FD727E1CEB46610056112B /* TCDatabaseUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TCDatabaseUITests.m; sourceTree = "<group>"; };
 		34FD72801CEB46610056112B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2F1E52250D2486A24E174B3 /* Pods-TCDatabase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCDatabase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TCDatabase/Pods-TCDatabase.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				587CE704A2C6B7B2ADD58CCB /* libPods-TCDatabase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +94,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		34A2DB6F1D0D03430043CF34 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				34A2DB701D0D038B0043CF34 /* TCDatabase.h */,
+				34A2DB711D0D038B0043CF34 /* TCDatabase.m */,
+				34A2DB721D0D038B0043CF34 /* TCDatabaseDAO.h */,
+				34A2DB731D0D038B0043CF34 /* TCDatabaseDAO.m */,
+				34A2DB741D0D038B0043CF34 /* TCSimpleTokenizer.h */,
+				34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */,
+				34A2DB761D0D038B0043CF34 /* stopWords.txt */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		34FD724D1CEB46610056112B = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +115,8 @@
 				34FD72721CEB46610056112B /* TCDatabaseTests */,
 				34FD727D1CEB46610056112B /* TCDatabaseUITests */,
 				34FD72571CEB46610056112B /* Products */,
+				5A4152E01104B9A742A7D193 /* Pods */,
+				7DCBB40AC138109F80D91A00 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +133,7 @@
 		34FD72581CEB46610056112B /* TCDatabase */ = {
 			isa = PBXGroup;
 			children = (
+				34A2DB6F1D0D03430043CF34 /* Classes */,
 				34FD725C1CEB46610056112B /* AppDelegate.h */,
 				34FD725D1CEB46610056112B /* AppDelegate.m */,
 				34FD725F1CEB46610056112B /* ViewController.h */,
@@ -140,6 +173,23 @@
 			path = TCDatabaseUITests;
 			sourceTree = "<group>";
 		};
+		5A4152E01104B9A742A7D193 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B2F1E52250D2486A24E174B3 /* Pods-TCDatabase.debug.xcconfig */,
+				1E57B9F505795062AD3371D0 /* Pods-TCDatabase.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		7DCBB40AC138109F80D91A00 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2F8B100E57E3296016AFFC67 /* libPods-TCDatabase.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -147,9 +197,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 34FD72831CEB46610056112B /* Build configuration list for PBXNativeTarget "TCDatabase" */;
 			buildPhases = (
+				F070FB88C68ED1B85BD596BF /* Check Pods Manifest.lock */,
 				34FD72521CEB46610056112B /* Sources */,
 				34FD72531CEB46610056112B /* Frameworks */,
 				34FD72541CEB46610056112B /* Resources */,
+				1FD30765E7BB37FD2243075F /* Embed Pods Frameworks */,
+				EE16B5FDDA01CBCBC8EAA8B6 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -203,10 +256,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0730;
-				ORGANIZATIONNAME = "iTech Technology";
+				ORGANIZATIONNAME = "陈胜";
 				TargetAttributes = {
 					34FD72551CEB46610056112B = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 5ZUQ226LCB;
 					};
 					34FD726E1CEB46610056112B = {
 						CreatedOnToolsVersion = 7.3;
@@ -243,6 +297,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34A2DB7A1D0D038B0043CF34 /* stopWords.txt in Resources */,
 				34FD72691CEB46610056112B /* LaunchScreen.storyboard in Resources */,
 				34FD72661CEB46610056112B /* Assets.xcassets in Resources */,
 				34FD72641CEB46610056112B /* Main.storyboard in Resources */,
@@ -265,13 +320,64 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1FD30765E7BB37FD2243075F /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TCDatabase/Pods-TCDatabase-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EE16B5FDDA01CBCBC8EAA8B6 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TCDatabase/Pods-TCDatabase-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F070FB88C68ED1B85BD596BF /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		34FD72521CEB46610056112B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				34FD72611CEB46610056112B /* ViewController.m in Sources */,
+				34A2DB771D0D038B0043CF34 /* TCDatabase.m in Sources */,
+				34A2DB781D0D038B0043CF34 /* TCDatabaseDAO.m in Sources */,
 				34FD725E1CEB46610056112B /* AppDelegate.m in Sources */,
+				34A2DB791D0D038B0043CF34 /* TCSimpleTokenizer.m in Sources */,
 				34FD725B1CEB46610056112B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,23 +517,31 @@
 		};
 		34FD72841CEB46610056112B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B2F1E52250D2486A24E174B3 /* Pods-TCDatabase.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TCDatabase/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ichensheng.TCDatabase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		34FD72851CEB46610056112B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E57B9F505795062AD3371D0 /* Pods-TCDatabase.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TCDatabase/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ichensheng.TCDatabase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -496,6 +610,7 @@
 				34FD72851CEB46610056112B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		34FD72861CEB46610056112B /* Build configuration list for PBXNativeTarget "TCDatabaseTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +619,7 @@
 				34FD72881CEB46610056112B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		34FD72891CEB46610056112B /* Build configuration list for PBXNativeTarget "TCDatabaseUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +628,7 @@
 				34FD728B1CEB46610056112B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,0 +1,15 @@
+PODS:
+  - FCFileManager (1.0.17)
+  - FMDB/FTS (2.6.2):
+    - FMDB/standard
+  - FMDB/standard (2.6.2)
+
+DEPENDENCIES:
+  - FCFileManager (~> 1.0.17)
+  - FMDB/FTS (= 2.6.2)
+
+SPEC CHECKSUMS:
+  FCFileManager: 8bfc931ce2a6223676147e9baf0e8a65c691eca6
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+
+COCOAPODS: 0.39.0

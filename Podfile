@@ -5,6 +5,7 @@ platform :ios, '7.0'
 target 'TCDatabase' do
 
 pod 'FMDB/FTS', '2.6.2'
+pod 'FCFileManager', '~> 1.0.17'
 
 end
 

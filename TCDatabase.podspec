@@ -10,4 +10,5 @@ Pod::Spec.new do |s|
   s.source_files  = "TCDatabase/Classes/*.{h,m}"
   s.requires_arc = true
   s.dependency "FMDB/FTS", "~> 2.6.2"
+	s.dependency "FCFileManager", "~> 1.0.17"
 end

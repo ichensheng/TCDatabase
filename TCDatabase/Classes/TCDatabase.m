@@ -93,7 +93,7 @@ static FMStopWordTokenizer *stopTok;
             db.crashOnErrors = YES;
 #endif
         }];
-        NSLog(@"创建用户数据库访问对象: %@", dbPath);
+        NSLog(@"创建数据库访问对象: %@", dbPath);
     } else {
         @autoreleasepool {
             [NSThread sleepForTimeInterval:0.5f];

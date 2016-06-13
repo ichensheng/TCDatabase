@@ -7,8 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "TCDatabaseManager.h"
+#import "TCDatabaseDAO.h"
+#import "TCDatabase.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <TCDatabaseManagerDelegate>
 
 @end
 
@@ -16,7 +19,19 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [TCDatabaseManager sharedInstance].delegate = self;
+    [[TCDatabaseManager sharedInstance] openDatabase];
+    
+    dispatch_async(TCDatabaseDAO.workQueue, ^{
+        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
+        NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
+        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
+        NSDictionary *user4 = @{@"USER_CODE":@"wnagzi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
+        TCDatabase *userDatabase = [TCDatabaseManager sharedInstance].userDatabase;
+        TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
+                                                  atDatabase:userDatabase];
+       [userDAO saveList:@[user1, user2, user3, user4]];
+    });
     return YES;
 }
 
@@ -40,6 +55,46 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - TCDatabaseManagerDelegate
+
+/**
+ *  用户数据库路径
+ *
+ *  @return 数据库路径
+ */
+- (NSString *)userDbFilePath {
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    return [[url absoluteString] stringByAppendingString:@"user.db"];
+}
+
+/**
+ *  用户表定义bundle名
+ *
+ *  @return bundle名
+ */
+- (NSString *)userTableBundleName {
+    return @"user";
+}
+
+/**
+ *  系统数据库路径
+ *
+ *  @return 数据库路径
+ */
+- (NSString *)systemDbFilePath {
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    return [[url absoluteString] stringByAppendingString:@"system.db"];
+}
+
+/**
+ *  系统表定义bundle名
+ *
+ *  @return bundle名
+ */
+- (NSString *)systemTableBundleName {
+    return @"system";
 }
 
 @end

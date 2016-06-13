@@ -16,7 +16,7 @@
 /**
  *  业务代码里如果没有自己的dispatch_queue_t可使用这个
  */
-- (dispatch_queue_t)workQueue;
++ (dispatch_queue_t)workQueue;
 
 /**
  *  指定数据库和表构造DAO
@@ -28,6 +28,17 @@
  */
 - (instancetype)initWithTable:(NSString *)table
                    atDatabase:(TCDatabase *)database;
+
+/**
+ *  指定数据库和表构造DAO
+ *
+ *  @param table    表名
+ *  @param database 数据库
+ *
+ *  @return DAO实例
+ */
++ (instancetype)daoWithTable:(NSString *)table
+                  atDatabase:(TCDatabase *)database;
 
 /**
  *  添加单条数据，存在则覆盖，不存在则insert

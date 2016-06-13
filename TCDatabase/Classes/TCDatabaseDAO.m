@@ -55,6 +55,20 @@ static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
 }
 
 /**
+ *  指定数据库和表构造DAO
+ *
+ *  @param table    表名
+ *  @param database 数据库
+ *
+ *  @return DAO实例
+ */
++ (instancetype)daoWithTable:(NSString *)table
+                  atDatabase:(TCDatabase *)database {
+    
+    return [[self alloc] initWithTable:table atDatabase:database];
+}
+
+/**
  *  添加单条数据，存在则覆盖，不存在则insert
  *
  *  注意：这里的做法是先删除原有的数据，然后重新insert一条新的记录，使用的是replace into方法，
@@ -844,11 +858,11 @@ static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
 
 #pragma mark - Getters and Setters
 
-- (dispatch_queue_t)workQueue {
++ (dispatch_queue_t)workQueue {
     static dispatch_once_t onceToken;
     static dispatch_queue_t workQueue;
     dispatch_once(&onceToken, ^{
-        workQueue = dispatch_queue_create("com.ruaho.database.workqueue", DISPATCH_QUEUE_SERIAL);
+        workQueue = dispatch_queue_create("com.ichensheng.database.workqueue", DISPATCH_QUEUE_SERIAL);
     });
     return workQueue;
 }

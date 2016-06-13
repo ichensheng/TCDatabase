@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		348F31561D0EC64A00CEE872 /* TCDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 348F31551D0EC64A00CEE872 /* TCDatabaseManager.m */; };
+		348F31581D0EF39E00CEE872 /* user.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 348F31571D0EF39E00CEE872 /* user.bundle */; };
+		348F315A1D0EF3A800CEE872 /* system.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 348F31591D0EF3A800CEE872 /* system.bundle */; };
 		34A2DB771D0D038B0043CF34 /* TCDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB711D0D038B0043CF34 /* TCDatabase.m */; };
 		34A2DB781D0D038B0043CF34 /* TCDatabaseDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB731D0D038B0043CF34 /* TCDatabaseDAO.m */; };
 		34A2DB791D0D038B0043CF34 /* TCSimpleTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */; };
@@ -45,6 +47,8 @@
 		2F8B100E57E3296016AFFC67 /* libPods-TCDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TCDatabase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		348F31541D0EC64A00CEE872 /* TCDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabaseManager.h; sourceTree = "<group>"; };
 		348F31551D0EC64A00CEE872 /* TCDatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDatabaseManager.m; sourceTree = "<group>"; };
+		348F31571D0EF39E00CEE872 /* user.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = user.bundle; sourceTree = "<group>"; };
+		348F31591D0EF3A800CEE872 /* system.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = system.bundle; sourceTree = "<group>"; };
 		34A2DB701D0D038B0043CF34 /* TCDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabase.h; sourceTree = "<group>"; };
 		34A2DB711D0D038B0043CF34 /* TCDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDatabase.m; sourceTree = "<group>"; };
 		34A2DB721D0D038B0043CF34 /* TCDatabaseDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabaseDAO.h; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 				34FD72671CEB46610056112B /* LaunchScreen.storyboard */,
 				34FD726A1CEB46610056112B /* Info.plist */,
 				34FD72591CEB46610056112B /* Supporting Files */,
+				348F31571D0EF39E00CEE872 /* user.bundle */,
+				348F31591D0EF3A800CEE872 /* system.bundle */,
 			);
 			path = TCDatabase;
 			sourceTree = "<group>";
@@ -304,8 +310,10 @@
 			files = (
 				34A2DB7A1D0D038B0043CF34 /* stopWords.txt in Resources */,
 				34FD72691CEB46610056112B /* LaunchScreen.storyboard in Resources */,
+				348F315A1D0EF3A800CEE872 /* system.bundle in Resources */,
 				34FD72661CEB46610056112B /* Assets.xcassets in Resources */,
 				34FD72641CEB46610056112B /* Main.storyboard in Resources */,
+				348F31581D0EF39E00CEE872 /* user.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

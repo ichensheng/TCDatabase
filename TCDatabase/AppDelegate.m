@@ -26,7 +26,7 @@
         NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
         NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
         NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
-        NSDictionary *user4 = @{@"USER_CODE":@"wnagzi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
+        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
         TCDatabase *userDatabase = [TCDatabaseManager sharedInstance].userDatabase;
         TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
                                                   atDatabase:userDatabase];

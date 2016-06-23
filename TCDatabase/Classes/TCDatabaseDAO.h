@@ -465,4 +465,11 @@
  */
 - (void)pageNum:(NSUInteger)pageNum showNum:(NSUInteger)showNum;
 
+/**
+ *  设置查询字段，逗号分隔
+ *
+ *  @param selects 查询字段
+ */
+- (void)selects:(NSString *)selects;
+
 @end

@@ -14,6 +14,7 @@ static NSString * const GROUP = @"_GROUP_";                // 分组设置
 static NSString * const ORDER = @"_ORDER_";                // 排序设置
 static NSString * const PRE_VALUES = @"_PREVALUES_";       // 设置prepare sql变量信息
 static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
+static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗号分隔，不设置则查询所有字段
 
 @interface TCDatabaseDAO()
 
@@ -774,7 +775,11 @@ static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
  *  @return 查询语句
  */
 - (NSString *)selectSqlFromSqlBean:(TCSqlBean *)sqlBean {
-    NSMutableString *selectSql = [NSMutableString stringWithFormat:@"select * from %@ where 1=1", self.table];
+    NSString *selects = [sqlBean.dictionary objectForKey:SELECTS];
+    if (!selects || selects.length == 0) {
+        selects = @"*";
+    }
+    NSMutableString *selectSql = [NSMutableString stringWithFormat:@"select %@ from %@ where 1=1", selects ,self.table];
     NSString *where = [sqlBean.dictionary objectForKey:WHERE];
     if (where && where.length > 0) {
         [selectSql appendString:where];
@@ -1232,6 +1237,15 @@ static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
  */
 - (void)pageNum:(NSUInteger)pageNum showNum:(NSUInteger)showNum {
     [self limit:showNum offset:(pageNum - 1) * showNum];
+}
+
+/**
+ *  设置查询字段，逗号分隔
+ *
+ *  @param selects 查询字段
+ */
+- (void)selects:(NSString *)selects {
+    [self.dictionary setObject:selects forKey:SELECTS];
 }
 
 /**

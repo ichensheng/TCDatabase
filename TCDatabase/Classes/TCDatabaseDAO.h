@@ -450,11 +450,19 @@
 - (void)desc:(NSString *)field;
 
 /**
- *  分页每页取的数据条数
+ *  指定获取哪几条数据
  *
- *  @param count  条数
+ *  @param count  获取条数
  *  @param offset 偏移量
  */
-- (void)limit:(NSInteger)count offset:(NSInteger)offset;
+- (void)limit:(NSUInteger)count offset:(NSUInteger)offset;
+
+/**
+ *  设置分页参数
+ *
+ *  @param pageNum 页码
+ *  @param showNum 每页条数
+ */
+- (void)pageNum:(NSUInteger)pageNum showNum:(NSUInteger)showNum;
 
 @end

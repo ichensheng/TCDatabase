@@ -1214,13 +1214,24 @@ static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
 }
 
 /**
- *  分页每页取的数据条数
+ *  指定获取哪几条数据
  *
- *  @param count 条数
+ *  @param count  获取条数
+ *  @param offset 偏移量
  */
-- (void)limit:(NSInteger)count offset:(NSInteger)offset {
+- (void)limit:(NSUInteger)count offset:(NSUInteger)offset {
     NSString *limitOffset = [NSString stringWithFormat:@" limit %ld offset %ld", (long)count, (long)offset];
     [self.dictionary setObject:limitOffset forKey:LIMIT_OFFSET];
+}
+
+/**
+ *  设置分页参数
+ *
+ *  @param pageNum 页码
+ *  @param showNum 每页条数
+ */
+- (void)pageNum:(NSUInteger)pageNum showNum:(NSUInteger)showNum {
+    [self limit:showNum offset:(pageNum - 1) * showNum];
 }
 
 /**

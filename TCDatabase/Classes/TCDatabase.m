@@ -277,7 +277,7 @@ static FMStopWordTokenizer *stopTok;
             }
             
             NSString *alertSQL = [NSString stringWithFormat:@"alter table %@ add column %@", tableName, addColumePars];
-            NSString *initValue = [columnType isEqualToString:@"TEXT"] ? @"''":@"";
+            NSString *initValue = [columnType isEqualToString:@"INTEGER"] ? @"0":@"''";
             NSString *initColumnValue = [NSString stringWithFormat:@"update %@ set %@=%@", tableName, columnName, initValue];
             [self.dbQueue inDatabase:^(FMDatabase *db) {
                 BOOL success = [db executeUpdate:alertSQL];

@@ -406,7 +406,7 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 - (NSString *)table {
     if (!_table) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"RHBatabaseDAO实例需要设置表名"
+                                       reason:@"TCDatabaseDAO实例需要设置表名"
                                      userInfo:nil];
     }
     return _table;
@@ -779,7 +779,7 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
     if (!selects || selects.length == 0) {
         selects = @"*";
     }
-    NSMutableString *selectSql = [NSMutableString stringWithFormat:@"select %@ from %@ where 1=1", selects ,self.table];
+    NSMutableString *selectSql = [NSMutableString stringWithFormat:@"select %@ from %@ where 1=1", selects, self.table];
     NSString *where = [sqlBean.dictionary objectForKey:WHERE];
     if (where && where.length > 0) {
         [selectSql appendString:where];

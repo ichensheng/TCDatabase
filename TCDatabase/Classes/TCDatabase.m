@@ -74,31 +74,33 @@ static FMStopWordTokenizer *stopTok;
  *  创建用户数据库连接队列
  */
 - (void)createDBQueueWithPath:(NSString *)dbPath {
-    if ([FCFileManager existsItemAtPath:dbPath]) {
-        _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
-    } else {
-        [FCFileManager createDirectoriesForFileAtPath:dbPath];
-        [self makeProtectionNoneForFile:dbPath];
-        _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
-    }
-    
-    /**
-     *  递归直到成功
-     */
-    if (_dbQueue) {
-        [_dbQueue inDatabase:^(FMDatabase *db) {
-            [db installTokenizerModuleWithName:kTokenizerModuleName];
-#ifdef DEBUG
-            db.traceExecution = YES;
-            db.crashOnErrors = YES;
-#endif
-        }];
-        NSLog(@"创建数据库访问对象: %@", dbPath);
-    } else {
-        @autoreleasepool {
-            [NSThread sleepForTimeInterval:0.5f];
+    if (dbPath) {
+        if ([FCFileManager existsItemAtPath:dbPath]) {
+            _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
+        } else {
+            [FCFileManager createDirectoriesForFileAtPath:dbPath];
+            [self makeProtectionNoneForFile:dbPath];
+            _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
         }
-        [self createDBQueueWithPath:dbPath];
+        
+        /**
+         *  递归直到成功
+         */
+        if (_dbQueue) {
+            [_dbQueue inDatabase:^(FMDatabase *db) {
+                [db installTokenizerModuleWithName:kTokenizerModuleName];
+#ifdef DEBUG
+                db.traceExecution = YES;
+                db.crashOnErrors = YES;
+#endif
+            }];
+            NSLog(@"创建数据库访问对象: %@", dbPath);
+        } else {
+            @autoreleasepool {
+                [NSThread sleepForTimeInterval:0.5f];
+            }
+            [self createDBQueueWithPath:dbPath];
+        }
     }
 }
 

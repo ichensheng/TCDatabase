@@ -33,6 +33,7 @@
  */
 - (void)openDatabase {
     [self checkDelegate];
+    NSLog(@"打开数据库");
     NSString *userDbFilePath = [self.delegate userDbFilePath];
     NSString *userTableBundleName = [self.delegate userTableBundleName];
     NSString *systemDbFilePath = [self.delegate systemDbFilePath];
@@ -45,6 +46,7 @@
  *  关闭数据库
  */
 - (void)closeDatabase {
+    NSLog(@"关闭数据库");
     [self.userDatabase close];
     [self.systemDatabase close];
     self.userDatabase = nil;

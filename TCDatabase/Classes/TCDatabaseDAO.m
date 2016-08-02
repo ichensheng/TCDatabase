@@ -694,7 +694,7 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
     if (!db.shouldCacheStatements) {
         [db setShouldCacheStatements:YES];
     }
-    if (self.isDynamicTable && data.allKeys.count > 0) {
+    if (self.isDynamicTable) {
         [self.database checkDynamicTable:self.table data:data withDb:db];
     }
 }

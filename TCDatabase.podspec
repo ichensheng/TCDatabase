@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name         = "TCDatabase"
-  s.version      = "0.1.3"
+  s.version      = "0.1.4"
   s.summary      = "封装FMDB，支持全文检索、支持条件对象查询、支持定时收回SQLite空间、支持JSON定义表、自动增加表字段等"
   s.homepage     = "https://github.com/ichensheng/TCDatabase"
   s.license      = "Apache"
   s.author             = { "ichensheng" => "cs200521@163.com" }
   s.platform     = :ios, "7.0"
-  s.source       = { :git => "https://github.com/ichensheng/TCDatabase.git", :tag => "0.1.3" }
+  s.source       = { :git => "https://github.com/ichensheng/TCDatabase.git", :tag => "0.1.4" }
   s.source_files = "TCDatabase/Classes/*.{h,m}"
 	s.resources 	 = "TCDatabase/Classes/*.txt"
   s.requires_arc = true

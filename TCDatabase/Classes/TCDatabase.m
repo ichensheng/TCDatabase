@@ -104,6 +104,10 @@ static FMStopWordTokenizer *stopTok;
         }
     }
     
+    if (!data) {
+        return;
+    }
+    
     if (tableDef) {
         NSMutableArray *cols = tableDef[@"cols"];
         NSMutableArray *columnNames = tableDef[@"columnNames"];

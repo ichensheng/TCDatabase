@@ -85,20 +85,22 @@ static FMStopWordTokenizer *stopTok;
     if (self.tablesDef[table]) {
         tableDef = self.tablesDef[table];
     } else {
-        NSMutableDictionary *tmpTableDef = [NSMutableDictionary dictionary];
-        NSArray *columnsOfTable = [self columnsOfTable:table withDb:db];
-        if (columnsOfTable.count > 0) {
-            NSMutableArray *cols = [NSMutableArray array];
-            NSMutableArray *columnNames = [NSMutableArray array];
-            for (NSString *column in columnsOfTable) {
-                [cols addObject:@{@"name":[column uppercaseString], @"type": @"text"}];
-                [columnNames addObject:[column uppercaseString]];
+        if ([self existsTables:@[table] withDb:db]) {
+            NSMutableDictionary *tmpTableDef = [NSMutableDictionary dictionary];
+            NSArray *columnsOfTable = [self columnsOfTable:table withDb:db];
+            if (columnsOfTable.count > 0) {
+                NSMutableArray *cols = [NSMutableArray array];
+                NSMutableArray *columnNames = [NSMutableArray array];
+                for (NSString *column in columnsOfTable) {
+                    [cols addObject:@{@"name":[column uppercaseString], @"type": @"text"}];
+                    [columnNames addObject:[column uppercaseString]];
+                }
+                tmpTableDef[@"table"] = table;
+                tmpTableDef[@"key"] = keyName;
+                tmpTableDef[@"cols"] = cols;
+                tmpTableDef[@"columnNames"] = columnNames;
+                self.tablesDef[table] = tableDef = tmpTableDef;
             }
-            tmpTableDef[@"table"] = table;
-            tmpTableDef[@"key"] = keyName;
-            tmpTableDef[@"cols"] = cols;
-            tmpTableDef[@"columnNames"] = columnNames;
-            self.tablesDef[table] = tableDef = tmpTableDef;
         }
     }
     
@@ -119,6 +121,7 @@ static FMStopWordTokenizer *stopTok;
             }
         }
     } else {
+        tableDef = [NSMutableDictionary dictionary];
         NSMutableArray *cols = [NSMutableArray array];
         [cols addObject:@{@"name":keyName, @"type": @"text"}];
         NSMutableArray *columnNames = [NSMutableArray array];

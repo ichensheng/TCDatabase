@@ -25,10 +25,14 @@
     
     TCDatabase *userDatabase = [TCDatabaseManager sharedInstance].userDatabase;
     
-    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"test"
+    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"hahah"
                                             atDatabase:userDatabase];
     
-    [testDAO removeById:@"4D7F33D543AF45788E09451222167D0A"];
+//    [testDAO save:@{@"test":@"test"}];
+//    [testDAO update:@{@"test2":@"1212AAAAA"} byId:@"DE20146037D14151931296DE47C40F7E"];
+//    [testDAO save:@{@"test11212":@"陈胜"}];
+//    [testDAO saveOrUpdateList:@[@{@"_PK_":@"DE20146037D14151931296DE47C40F7E", @"test":@"陈胜"}, @{@"_PK_":@"907C8D4D1706406BAD35603572D96145", @"chensheng":@"test"}]];
+    [testDAO removeByIdList:@[@"DE20146037D14151931296DE47C40F7E"]];
 //    TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
 //                                              atDatabase:userDatabase];
 //    

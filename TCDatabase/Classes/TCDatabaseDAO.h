@@ -13,6 +13,10 @@
 @class UIColor;
 @interface TCDatabaseDAO : NSObject
 
+@property (nonatomic, strong, readonly) TCDatabase *database;
+@property (nonatomic, copy, readonly) NSString *table;
+@property (nonatomic, assign, getter=isDynamicTable) BOOL dynamicTable; // 动态表标识
+
 /**
  *  业务代码里如果没有自己的dispatch_queue_t可使用这个
  */

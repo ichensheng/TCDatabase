@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "TCDatabaseManager.h"
 #import "TCDatabaseDAO.h"
+#import "TCDynamicDAO.h"
 #import "TCDatabase.h"
 
 @interface AppDelegate () <TCDatabaseManagerDelegate>
@@ -23,23 +24,28 @@
     [[TCDatabaseManager sharedInstance] openDatabase];
     
     TCDatabase *userDatabase = [TCDatabaseManager sharedInstance].userDatabase;
-    TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
-                                              atDatabase:userDatabase];
     
-    dispatch_async(TCDatabaseDAO.workQueue, ^{
-        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
-        NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
-        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
-        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
-        
-       [userDAO saveList:@[user1, user2, user3, user4]];
-        
-        TCSqlBean *sqlBean = [TCSqlBean instance];
-        [sqlBean pageNum:2 showNum:4];
-        [sqlBean selects:@"user_name,user_code"];
-        [sqlBean desc:@"user_code"];
-        NSLog(@"%@", [userDAO query:sqlBean]);
-    });
+    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"test"
+                                            atDatabase:userDatabase];
+    
+    [testDAO removeById:@"4D7F33D543AF45788E09451222167D0A"];
+//    TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
+//                                              atDatabase:userDatabase];
+//    
+//    dispatch_async(TCDatabaseDAO.workQueue, ^{
+//        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
+//        NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
+//        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
+//        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
+//        
+//       [userDAO saveList:@[user1, user2, user3, user4]];
+//        
+//        TCSqlBean *sqlBean = [TCSqlBean instance];
+//        [sqlBean pageNum:2 showNum:4];
+//        [sqlBean selects:@"user_name,user_code"];
+//        [sqlBean desc:@"user_code"];
+//        NSLog(@"%@", [userDAO query:sqlBean]);
+//    });
     
     
     

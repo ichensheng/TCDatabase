@@ -14,6 +14,7 @@
 		34A2DB781D0D038B0043CF34 /* TCDatabaseDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB731D0D038B0043CF34 /* TCDatabaseDAO.m */; };
 		34A2DB791D0D038B0043CF34 /* TCSimpleTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */; };
 		34A2DB7A1D0D038B0043CF34 /* stopWords.txt in Resources */ = {isa = PBXBuildFile; fileRef = 34A2DB761D0D038B0043CF34 /* stopWords.txt */; };
+		34C96F661D506D6E0010FFAC /* TCDynamicDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C96F651D506D6E0010FFAC /* TCDynamicDAO.m */; };
 		34FD725B1CEB46610056112B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD725A1CEB46610056112B /* main.m */; };
 		34FD725E1CEB46610056112B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD725D1CEB46610056112B /* AppDelegate.m */; };
 		34FD72611CEB46610056112B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD72601CEB46610056112B /* ViewController.m */; };
@@ -56,6 +57,8 @@
 		34A2DB741D0D038B0043CF34 /* TCSimpleTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCSimpleTokenizer.h; sourceTree = "<group>"; };
 		34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCSimpleTokenizer.m; sourceTree = "<group>"; };
 		34A2DB761D0D038B0043CF34 /* stopWords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stopWords.txt; sourceTree = "<group>"; };
+		34C96F641D506D6E0010FFAC /* TCDynamicDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDynamicDAO.h; sourceTree = "<group>"; };
+		34C96F651D506D6E0010FFAC /* TCDynamicDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDynamicDAO.m; sourceTree = "<group>"; };
 		34FD72561CEB46610056112B /* TCDatabase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCDatabase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34FD725A1CEB46610056112B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		34FD725C1CEB46610056112B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -108,6 +111,8 @@
 				34A2DB711D0D038B0043CF34 /* TCDatabase.m */,
 				34A2DB721D0D038B0043CF34 /* TCDatabaseDAO.h */,
 				34A2DB731D0D038B0043CF34 /* TCDatabaseDAO.m */,
+				34C96F641D506D6E0010FFAC /* TCDynamicDAO.h */,
+				34C96F651D506D6E0010FFAC /* TCDynamicDAO.m */,
 				34A2DB741D0D038B0043CF34 /* TCSimpleTokenizer.h */,
 				34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */,
 				348F31541D0EC64A00CEE872 /* TCDatabaseManager.h */,
@@ -387,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				348F31561D0EC64A00CEE872 /* TCDatabaseManager.m in Sources */,
+				34C96F661D506D6E0010FFAC /* TCDynamicDAO.m in Sources */,
 				34FD72611CEB46610056112B /* ViewController.m in Sources */,
 				34A2DB771D0D038B0043CF34 /* TCDatabase.m in Sources */,
 				34A2DB781D0D038B0043CF34 /* TCDatabaseDAO.m in Sources */,

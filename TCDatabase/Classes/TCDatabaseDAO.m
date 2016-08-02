@@ -18,7 +18,8 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 
 @interface TCDatabaseDAO()
 
-@property (nonatomic, copy) NSString *table;
+@property (nonatomic, strong, readwrite) TCDatabase *database;
+@property (nonatomic, copy, readwrite) NSString *table;
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong) NSDictionary *tablesDef;
 
@@ -48,6 +49,7 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
                    atDatabase:(TCDatabase *)database {
     
     if (self = [super init]) {
+        _database = database;
         _dbQueue = database.dbQueue;
         _tablesDef = database.tablesDef;
         _table = [table uppercaseString];
@@ -102,7 +104,11 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 - (BOOL)saveList:(NSArray *)dataList {
     __block BOOL success = NO;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        [self preprocess:db];
+        if (dataList.count > 0) {
+            [self preprocess:db withData:dataList[0]];
+        } else {
+            [self preprocess:db];
+        }
         NSMutableString *insertSqls = [[NSMutableString alloc] init];
         for (NSDictionary *data in dataList) {
             NSMutableArray *insertValues = [NSMutableArray array];
@@ -181,6 +187,9 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 - (BOOL)removeById:(NSString *)pk {
     NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
+    if (!keyName && self.isDynamicTable) {
+        keyName = kDynamicKey;
+    }
     TCSqlBean *deleteSqlBean = [TCSqlBean instance];
     [deleteSqlBean andEQ:keyName value:pk];
     return [self remove:deleteSqlBean];
@@ -199,6 +208,9 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
     }
     NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
+    if (!keyName && self.isDynamicTable) {
+        keyName = kDynamicKey;
+    }
     TCSqlBean *deleteSqlBean = [TCSqlBean instance];
     [deleteSqlBean andIn:keyName values:pks];
     return [self remove:deleteSqlBean];
@@ -536,7 +548,7 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
  *  @return 保存成功返回YES，否则返回NO
  */
 - (BOOL)save:(NSDictionary *)data withDb:(FMDatabase *)db {
-    [self preprocess:db];
+    [self preprocess:db withData:data];
     NSMutableArray *insertValues = [NSMutableArray array];
     NSString *insertSql = [self replaceSqlForData:data insertValues:insertValues batchSql:NO];
     BOOL success = [db executeUpdate:insertSql withArgumentsInArray:insertValues];
@@ -555,7 +567,7 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
  */
 - (BOOL)update:(NSDictionary *)data bySqlBean:(TCSqlBean *)sqlBean withDb:(FMDatabase *)db {
     BOOL success = NO;
-    [self preprocess:db];
+    [self preprocess:db withData:data];
     NSString *where = [sqlBean.dictionary objectForKey:WHERE];
     NSMutableArray *updateValues = [NSMutableArray array];
     NSString *updateSql = [self updateSqlForData:data updateValues:updateValues];
@@ -614,6 +626,9 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 - (NSDictionary *)queryById:(NSString *)pk withDb:(FMDatabase *)db {
     NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
+    if (!keyName && self.isDynamicTable) {
+        keyName = kDynamicKey;
+    }
     TCSqlBean *querySqlBean = [TCSqlBean instance];
     [querySqlBean andEQ:keyName value:pk];
     NSArray *results = [self query:querySqlBean withDb:db];
@@ -661,18 +676,36 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 - (BOOL)update:(NSDictionary *)data byId:(NSString *)pk withDb:(FMDatabase *)db {
     NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
+    if (!keyName && self.isDynamicTable) {
+        keyName = kDynamicKey;
+    }
     TCSqlBean *updateSqlBean = [TCSqlBean instance];
     [updateSqlBean andEQ:keyName value:pk];
     return [self update:data bySqlBean:updateSqlBean withDb:db];
 }
 
 /**
- *  db预处理
+ *  预处理
  *
- *  @param db FMDatabase
+ *  @param db   FMDatabase
+ *  @param data 动态数据对象
+ */
+- (void)preprocess:(FMDatabase *)db withData:(NSDictionary *)data {
+    if (!db.shouldCacheStatements) {
+        [db setShouldCacheStatements:YES];
+    }
+    if (self.isDynamicTable && data.allKeys.count > 0) {
+        [self.database checkDynamicTable:self.table data:data withDb:db];
+    }
+}
+
+/**
+ *  预处理
+ *
+ *  @param db   FMDatabase
  */
 - (void)preprocess:(FMDatabase *)db {
-    [db setShouldCacheStatements:YES];
+    [self preprocess:db withData:nil];
 }
 
 /**
@@ -870,6 +903,14 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
         workQueue = dispatch_queue_create("com.ichensheng.database.workqueue", DISPATCH_QUEUE_SERIAL);
     });
     return workQueue;
+}
+
+- (void)setDynamicTable:(BOOL)dynamicTable {
+    _dynamicTable = dynamicTable;
+    NSString *prefix = [@"dynamic_table_" uppercaseString];
+    if (![_table hasPrefix:prefix]) {
+        _table = [NSString stringWithFormat:@"%@%@", prefix, _table];
+    }
 }
 
 @end

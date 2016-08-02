@@ -68,6 +68,80 @@ static FMStopWordTokenizer *stopTok;
     }
 }
 
+/**
+ *  自动检测扩展动态表
+ *
+ *  @param table 表名，会自动添加前缀
+ *  @param data  动态表数据
+ *  @param db    FMDatabase，防止嵌套
+ */
+- (void)checkDynamicTable:(NSString *)table
+                     data:(NSDictionary *)data
+                   withDb:(FMDatabase *)db {
+    
+    table = [table uppercaseString];
+    NSMutableDictionary *tableDef = nil;
+    NSString *keyName = kDynamicKey;
+    if (self.tablesDef[table]) {
+        tableDef = self.tablesDef[table];
+    } else {
+        NSMutableDictionary *tmpTableDef = [NSMutableDictionary dictionary];
+        NSArray *columnsOfTable = [self columnsOfTable:table withDb:db];
+        if (columnsOfTable.count > 0) {
+            NSMutableArray *cols = [NSMutableArray array];
+            NSMutableArray *columnNames = [NSMutableArray array];
+            for (NSString *column in columnsOfTable) {
+                [cols addObject:@{@"name":[column uppercaseString], @"type": @"text"}];
+                [columnNames addObject:[column uppercaseString]];
+            }
+            tmpTableDef[@"table"] = table;
+            tmpTableDef[@"key"] = keyName;
+            tmpTableDef[@"cols"] = cols;
+            tmpTableDef[@"columnNames"] = columnNames;
+            self.tablesDef[table] = tableDef = tmpTableDef;
+        }
+    }
+    
+    if (tableDef) {
+        NSMutableArray *cols = tableDef[@"cols"];
+        NSMutableArray *columnNames = tableDef[@"columnNames"];
+        for (NSString *key in data) {
+            BOOL exists = NO;
+            for (NSString *column in columnNames) {
+                if ([column isEqualToString:[key uppercaseString]]) {
+                    exists = YES;
+                    break;
+                }
+            }
+            if (!exists) {
+                [cols addObject:@{@"name":[key uppercaseString], @"type": @"text"}];
+                [columnNames addObject:[key uppercaseString]];
+            }
+        }
+    } else {
+        NSMutableArray *cols = [NSMutableArray array];
+        [cols addObject:@{@"name":keyName, @"type": @"text"}];
+        NSMutableArray *columnNames = [NSMutableArray array];
+        [columnNames addObject:keyName];
+        for (NSString *key in data) {
+            [cols addObject:@{@"name":[key uppercaseString], @"type": @"text"}];
+            [columnNames addObject:[key uppercaseString]];
+        }
+        
+        tableDef[@"table"] = table;
+        tableDef[@"key"] = keyName;
+        tableDef[@"cols"] = cols;
+        tableDef[@"columnNames"] = columnNames;
+        self.tablesDef[table] = tableDef;
+    }
+    
+    if ([self existsTables:@[table] withDb:db]) {
+        [self addColumnsFromTableDef:tableDef withDb:db];
+    } else {
+        [self createTableWithDef:tableDef withDb:db];
+    }
+}
+
 #pragma mark - Private Methods
 
 /**
@@ -244,10 +318,11 @@ static FMStopWordTokenizer *stopTok;
  *  表存在则添加字段
  *
  *  @param tableDef 表定义
+ *  @param db       FMDatabase，防止嵌套
  */
-- (BOOL)addColumnsFromTableDef:(NSDictionary *)tableDef {
+- (BOOL)addColumnsFromTableDef:(NSDictionary *)tableDef withDb:(FMDatabase *)db {
     NSString *tableName = [tableDef objectForKey:@"table"];
-    NSArray *columnsOfTableInDatabase = [self columnsOfTable:tableName];
+    NSArray *columnsOfTableInDatabase = [self columnsOfTable:tableName withDb:db];
     NSMutableArray *alterAddColumns = [NSMutableArray array];
     NSArray *columnsInTableDef = [tableDef objectForKey:@"cols"];
     for (NSInteger i = 0; i < columnsInTableDef.count; i++) {
@@ -281,13 +356,11 @@ static FMStopWordTokenizer *stopTok;
             NSString *alertSQL = [NSString stringWithFormat:@"alter table %@ add column %@", tableName, addColumePars];
             NSString *initValue = [columnType isEqualToString:@"INTEGER"] ? @"0":@"''";
             NSString *initColumnValue = [NSString stringWithFormat:@"update %@ set %@=%@", tableName, columnName, initValue];
-            [self.dbQueue inDatabase:^(FMDatabase *db) {
-                BOOL success = [db executeUpdate:alertSQL];
-                if (success) {
-                    [db executeUpdate:initColumnValue];
-                    [alterAddColumns addObject:columnName];
-                }
-            }];
+            BOOL success = [db executeUpdate:alertSQL];
+            if (success) {
+                [db executeUpdate:initColumnValue];
+                [alterAddColumns addObject:columnName];
+            }
         }
     }
     
@@ -297,6 +370,19 @@ static FMStopWordTokenizer *stopTok;
     } else {
         return NO;
     }
+}
+
+/**
+ *  表存在则添加字段
+ *
+ *  @param tableDef 表定义
+ */
+- (BOOL)addColumnsFromTableDef:(NSDictionary *)tableDef {
+    __block BOOL result = NO;
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        result = [self addColumnsFromTableDef:tableDef withDb:db];
+    }];
+    return result;
 }
 
 /**
@@ -328,6 +414,17 @@ static FMStopWordTokenizer *stopTok;
         ifExists = [self existsTables:tableNames withDb:db];
     }];
     return ifExists;
+}
+
+/**
+ *  根据表名判断该表在数据库里存不存在
+ *
+ *  @param tableName 表名
+ *
+ *  @return BOOL
+ */
+- (BOOL)existsTable:(NSString *)tableName {
+    return [self existsTables:@[tableName]];
 }
 
 /**

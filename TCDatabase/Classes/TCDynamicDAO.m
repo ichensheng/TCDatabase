@@ -101,4 +101,60 @@
     return NO;
 }
 
+/**
+ *  按条件删除数据
+ *
+ *  @param sqlBean 条件对象
+ *
+ *  @return 删除成功返回YES，否则返回NO
+ */
+- (BOOL)remove:(TCSqlBean *)sqlBean {
+    if ([self.database existsTable:self.table]) {
+        return [super remove:sqlBean];
+    }
+    return NO;
+}
+
+/**
+ *  按主键删除数据
+ *
+ *  @param pk 主键
+ *
+ *  @return 删除成功返回YES，否则返回NO
+ */
+- (BOOL)removeById:(NSString *)pk {
+    if ([self.database existsTable:self.table]) {
+        return [super removeById:pk];
+    }
+    return NO;
+}
+
+/**
+ *  按主键批量删除
+ *
+ *  @param pks 主键数组
+ *
+ *  @return 删除成功返回YES，否则返回NO
+ */
+- (BOOL)removeByIdList:(NSArray *)pks {
+    if ([self.database existsTable:self.table]) {
+        return [super removeByIdList:pks];
+    }
+    return NO;
+}
+
+/**
+ *  自动匹配字典数据里的主键，然后删除
+ *
+ *  @param dataList 数据数组
+ *
+ *  @return 删除成功返回YES，否则返回NO
+ */
+- (BOOL)removeList:(NSArray *)dataList {
+    if ([self.database existsTable:self.table]) {
+        return [super removeList:dataList];
+    }
+    return NO;
+}
+
 @end

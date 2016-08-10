@@ -16,6 +16,8 @@ static NSString * const PRE_VALUES = @"_PREVALUES_";       // 设置prepare sql�
 static NSString * const LIMIT_OFFSET = @"_LIMIT_OFFSET_";  // 获取条数
 static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗号分隔，不设置则查询所有字段
 
+static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表前缀
+
 @interface TCDatabaseDAO()
 
 @property (nonatomic, strong, readwrite) TCDatabase *database;
@@ -907,9 +909,8 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 
 - (void)setDynamicTable:(BOOL)dynamicTable {
     _dynamicTable = dynamicTable;
-    NSString *prefix = [@"dynamic_table_" uppercaseString];
-    if (![_table hasPrefix:prefix]) {
-        _table = [NSString stringWithFormat:@"%@%@", prefix, _table];
+    if (![_table hasPrefix:kDynamicTablePrefix]) {
+        _table = [NSString stringWithFormat:@"%@%@", kDynamicTablePrefix, _table];
     }
 }
 

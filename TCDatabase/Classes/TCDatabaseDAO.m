@@ -863,7 +863,11 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (void)printSQLLog:(NSString *)sql values:(NSArray *)values {
     if ([NSThread isMainThread]) {
+#ifdef DDLogError
+        DDLogError(@"请注意该SQL语句在主线程执行：%@", [self buildPrintSql:sql values:values]);
+#else
         NSLog(@"请注意该SQL语句在主线程执行：%@", [self buildPrintSql:sql values:values]);
+#endif
     }
 }
 

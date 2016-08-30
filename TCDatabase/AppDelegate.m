@@ -25,33 +25,30 @@
     
     TCDatabase *userDatabase = [TCDatabaseManager sharedInstance].userDatabase;
     
-    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"hahah"
-                                            atDatabase:userDatabase];
+//    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"hahah"
+//                                            atDatabase:userDatabase];
     
 //    [testDAO save:@{@"test":@"test"}];
 //    [testDAO update:@{@"test2":@"1212AAAAA"} byId:@"DE20146037D14151931296DE47C40F7E"];
 //    [testDAO save:@{@"test11212":@"陈胜"}];
 //    [testDAO saveOrUpdateList:@[@{@"_PK_":@"DE20146037D14151931296DE47C40F7E", @"test":@"陈胜"}, @{@"_PK_":@"907C8D4D1706406BAD35603572D96145", @"chensheng":@"test"}]];
-    [testDAO removeByIdList:@[@"DE20146037D14151931296DE47C40F7E"]];
-//    TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
-//                                              atDatabase:userDatabase];
-//    
-//    dispatch_async(TCDatabaseDAO.workQueue, ^{
-//        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
-//        NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
-//        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
-//        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
-//        
-//       [userDAO saveList:@[user1, user2, user3, user4]];
-//        
-//        TCSqlBean *sqlBean = [TCSqlBean instance];
-//        [sqlBean pageNum:2 showNum:4];
-//        [sqlBean selects:@"user_name,user_code"];
-//        [sqlBean desc:@"user_code"];
-//        NSLog(@"%@", [userDAO query:sqlBean]);
-//    });
+//    [testDAO removeByIdList:@[@"DE20146037D14151931296DE47C40F7E"]];
+    TCDatabaseDAO *userDAO = [TCDatabaseDAO daoWithTable:@"USER"
+                                              atDatabase:userDatabase];
     
     
+
+    dispatch_async(TCDatabaseDAO.workQueue, ^{
+        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
+        NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
+        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
+        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
+        
+       [userDAO saveList:@[user1, user2, user3, user4]];
+    });
+    
+    TCSqlBean *sqlBean = [TCSqlBean instance];
+    [userDAO count:sqlBean];
     
     return YES;
 }

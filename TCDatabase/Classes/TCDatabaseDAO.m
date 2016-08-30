@@ -350,6 +350,28 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
+ *  给定条件数据的条数
+ *
+ *  @param sqlBean 条件
+ *
+ *  @return 数据条数
+ */
+- (NSInteger)count:(TCSqlBean *)sqlBean {
+    __block NSInteger count = 0;
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:[self countSqlFromSqlBean:sqlBean]];
+        if (rs) {
+            while ([rs next]) {
+                NSDictionary *dict = [rs resultDictionary];
+                count = [dict[@"count"] integerValue];
+            }
+            [rs close];
+        }
+    }];
+    return count;
+}
+
+/**
  *  全文检索
  *
  *  @param keyword 检索关键字
@@ -835,6 +857,25 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
+ *  生成查询数据总量的语句
+ *
+ *  @param sqlBean 条件
+ *
+ *  @return 查询语句
+ */
+- (NSString *)countSqlFromSqlBean:(TCSqlBean *)sqlBean {
+    NSMutableString *countSql = [NSMutableString stringWithFormat:@"select count(*) as count from %@ where 1=1", self.table];
+    if (!sqlBean) {
+        return countSql;
+    }
+    NSString *where = [sqlBean.dictionary objectForKey:WHERE];
+    if (where && where.length > 0) {
+        [countSql appendString:where];
+    }
+    return countSql;
+}
+
+/**
  *  把数据里面字段key都改成大写
  *
  *  @param data    数据
@@ -863,11 +904,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (void)printSQLLog:(NSString *)sql values:(NSArray *)values {
     if ([NSThread isMainThread]) {
-#ifdef DDLogError
-        DDLogError(@"请注意该SQL语句在主线程执行：%@", [self buildPrintSql:sql values:values]);
-#else
         NSLog(@"请注意该SQL语句在主线程执行：%@", [self buildPrintSql:sql values:values]);
-#endif
     }
 }
 

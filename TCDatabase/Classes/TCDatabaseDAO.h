@@ -188,6 +188,15 @@
 - (NSDictionary *)queryById:(NSString *)pk;
 
 /**
+ *  给定条件数据的条数
+ *
+ *  @param sqlBean 条件
+ *
+ *  @return 数据条数
+ */
+- (NSInteger)count:(TCSqlBean *)sqlBean;
+
+/**
  *  全文检索
  *
  *  @param keyword 检索关键字

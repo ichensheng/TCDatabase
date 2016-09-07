@@ -413,7 +413,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
             searchSql = [searchSql stringByAppendingString:matchSql];
             FMResultSet *rs = [db executeQuery:searchSql];
             while ([rs next]) {
-                [searchResults addObject:[self filterNull:[rs resultDictionary] snippets:mutableFields highlightColor:color]];
+                [searchResults addObject:[self replaceNull:[rs resultDictionary] snippets:mutableFields highlightColor:color]];
             }
             [rs close];
             [self printSQLLog:searchSql];
@@ -555,7 +555,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
- *  过滤掉查询结果的null
+ *  替换掉查询结果的null
  *
  *  @param resultDict 数据库记录
  *

@@ -303,7 +303,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     [self.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *rs = [db executeQuery:sql];
         while ([rs next]) {
-            [results addObject:[self filterNull:[rs resultDictionary]]];
+            [results addObject:[self replaceNull:[rs resultDictionary]]];
         }
         [rs close];
     }];
@@ -480,21 +480,23 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
- *  过滤掉查询结果的null，并且高亮
+ *  替换null为空字符串，并且高亮
  *
  *  @param resultDict 数据库记录
  *  @param color      高亮颜色记录
  *
  *  @return 过滤了null之后的记录
  */
-- (NSDictionary *)filterNull:(NSDictionary *)result
-                    snippets:(NSArray *)fields
-              highlightColor:(UIColor *)color {
+- (NSDictionary *)replaceNull:(NSDictionary *)result
+                     snippets:(NSArray *)fields
+               highlightColor:(UIColor *)color {
     
     NSMutableDictionary *mutableResultDict = [NSMutableDictionary dictionary];
     for (NSString *key in result) {
         id fieldValue = result[key];
-        if (![fieldValue isKindOfClass:[NSNull class]]) {
+        if ([fieldValue isKindOfClass:[NSNull class]]) {
+            mutableResultDict[key] = @""; // null替换为空字符串，使得转换成模型时不崩溃
+        } else {
             if ([fields containsObject:key]) {
                 mutableResultDict[key] = [self highlightString:fieldValue withColor:color];
             } else {
@@ -559,8 +561,8 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *
  *  @return 过滤了null之后的记录
  */
-- (NSDictionary *)filterNull:(NSDictionary *)resultDict {
-    return [self filterNull:resultDict snippets:nil highlightColor:nil];
+- (NSDictionary *)replaceNull:(NSDictionary *)resultDict {
+    return [self replaceNull:resultDict snippets:nil highlightColor:nil];
 }
 
 /**
@@ -679,7 +681,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     [self printSQLLog:selectSql values:preValues];
     if (rs) {
         while ([rs next]) {
-            [results addObject:[self filterNull:[rs resultDictionary]]];
+            [results addObject:[self replaceNull:[rs resultDictionary]]];
         }
         [rs close];
     } else { // 失败

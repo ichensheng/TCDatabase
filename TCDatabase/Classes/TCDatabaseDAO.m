@@ -359,7 +359,8 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (NSInteger)count:(TCSqlBean *)sqlBean {
     __block NSInteger count = 0;
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:[self countSqlFromSqlBean:sqlBean]];
+        NSArray *preValues = [sqlBean.dictionary objectForKey:PRE_VALUES];
+        FMResultSet *rs = [db executeQuery:[self countSqlFromSqlBean:sqlBean] withArgumentsInArray:preValues];
         if (rs) {
             while ([rs next]) {
                 NSDictionary *dict = [rs resultDictionary];

@@ -8,6 +8,13 @@
 
 #import "TCDatabaseManager.h"
 
+@interface TCDatabaseManager()
+
+@property (nonatomic, strong) NSMutableDictionary *userDAOCache;
+@property (nonatomic, strong) NSMutableDictionary *systemDAOCache;
+
+@end
+
 @implementation TCDatabaseManager
 
 + (instancetype)sharedInstance {
@@ -51,6 +58,8 @@
     [self.systemDatabase close];
     self.userDatabase = nil;
     self.systemDatabase = nil;
+    self.userDAOCache = nil;
+    self.systemDAOCache = nil;
 }
 
 /**
@@ -61,7 +70,13 @@
  *  @return TCDatabaseDAO
  */
 - (TCDatabaseDAO *)databaseDAO:(NSString *)table {
-    return [[TCDatabaseDAO alloc] initWithTable:table atDatabase:self.userDatabase];
+    NSString *uppercaseTable = [table uppercaseString];
+    TCDatabaseDAO *databaseDAO = self.userDAOCache[uppercaseTable];
+    if (!databaseDAO) {
+        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table atDatabase:self.userDatabase];
+        self.userDAOCache[uppercaseTable] = databaseDAO;
+    }
+    return databaseDAO;
 }
 
 /**
@@ -72,7 +87,13 @@
  *  @return TCDatabaseDAO
  */
 - (TCDatabaseDAO *)sysDatabaseDAO:(NSString *)table {
-    return [[TCDatabaseDAO alloc] initWithTable:table atDatabase:self.systemDatabase];
+    NSString *uppercaseTable = [table uppercaseString];
+    TCDatabaseDAO *databaseDAO = self.systemDAOCache[uppercaseTable];
+    if (!databaseDAO) {
+        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table atDatabase:self.systemDatabase];
+        self.systemDAOCache[uppercaseTable] = databaseDAO;
+    }
+    return databaseDAO;
 }
 
 #pragma mark - Private Methods
@@ -94,6 +115,22 @@
     if (![self.delegate respondsToSelector:@selector(systemTableBundleName)]) {
         NSAssert(NO, @"TCDatabaseManagerDelegate代理方法systemTableBundleName必须实现");
     }
+}
+
+#pragma mark - Getters and Setters
+
+- (NSMutableDictionary *)userDAOCache {
+    if (!_userDAOCache) {
+        _userDAOCache = [NSMutableDictionary dictionary];
+    }
+    return _userDAOCache;
+}
+
+- (NSMutableDictionary *)systemDAOCache {
+    if (!_systemDAOCache) {
+        _systemDAOCache = [NSMutableDictionary dictionary];
+    }
+    return _systemDAOCache;
 }
 
 @end

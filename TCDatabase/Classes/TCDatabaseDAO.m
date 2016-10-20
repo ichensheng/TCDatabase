@@ -87,7 +87,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (BOOL)save:(NSDictionary *)data {
     __block BOOL success = NO;
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        [self save:data withDb:db];
+        success = [self save:data withDb:db];
     }];
     return success;
 }
@@ -134,7 +134,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (BOOL)saveOrUpdate:(NSDictionary *)data {
     __block BOOL success = NO;
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        [self saveOrUpdate:data withDb:db];
+        success = [self saveOrUpdate:data withDb:db];
     }];
     return success;
 }
@@ -252,7 +252,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (BOOL)update:(NSDictionary *)data bySqlBean:(TCSqlBean *)sqlBean {
     __block BOOL success = NO;
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        [self update:data bySqlBean:sqlBean withDb:db];
+        success = [self update:data bySqlBean:sqlBean withDb:db];
     }];
     return success;
 }

@@ -44,34 +44,6 @@
 }
 
 /**
- *  如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法
- *
- *  @param data 数据对象
- *
- *  @return 保存成功返回YES，否则返回NO
- */
-- (BOOL)saveOrUpdate:(NSDictionary *)data {
-    if ([self.database existsTable:self.table]) {
-        return [super saveOrUpdate:data];
-    }
-    return NO;
-}
-
-/**
- *  批量保存数据，如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法
- *
- *  @param dataList 数据数组
- *
- *  @return 保存成功返回YES，否则返回NO
- */
-- (BOOL)saveOrUpdateList:(NSArray *)dataList {
-    if ([self.database existsTable:self.table]) {
-        return [super saveOrUpdateList:dataList];
-    }
-    return NO;
-}
-
-/**
  *  按照条件更新数据
  *
  *  @param data    需要更新的字段和对应的值

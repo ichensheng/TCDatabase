@@ -81,7 +81,7 @@
  */
 - (BOOL)update:(NSDictionary *)data bySqlBean:(TCSqlBean *)sqlBean {
     if ([self.database existsTable:self.table]) {
-        [super update:data bySqlBean:sqlBean];
+        return [super update:data bySqlBean:sqlBean];
     }
     return NO;
 }
@@ -96,7 +96,7 @@
  */
 - (BOOL)update:(NSDictionary *)data byId:(NSString *)pk {
     if ([self.database existsTable:self.table]) {
-        [super update:data byId:pk];
+        return [super update:data byId:pk];
     }
     return NO;
 }

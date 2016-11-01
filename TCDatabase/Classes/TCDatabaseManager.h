@@ -59,6 +59,15 @@ static NSString * const kSystemDatabaseName = @"system_database";
  */
 - (TCDynamicDAO *)dynamicDatabaseDAO:(NSString *)table;
 
+/**
+ *  获取系统数据库动态表访问对象
+ *
+ *  @param table 表名
+ *
+ *  @return TCDynamicDAO
+ */
+- (TCDynamicDAO *)sysDynamicDatabaseDAO:(NSString *)table;
+
 @end
 
 @protocol TCDatabaseManagerDelegate <NSObject>

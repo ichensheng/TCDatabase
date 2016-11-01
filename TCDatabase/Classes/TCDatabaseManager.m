@@ -113,6 +113,19 @@
                              provider:self];
 }
 
+/**
+ *  获取系统数据库动态表访问对象
+ *
+ *  @param table 表名
+ *
+ *  @return TCDynamicDAO
+ */
+- (TCDynamicDAO *)sysDynamicDatabaseDAO:(NSString *)table {
+    return [TCDynamicDAO daoWithTable:table
+                         databaseName:kSystemDatabaseName
+                             provider:self];
+}
+
 #pragma mark TCDatabaseProvider
 
 - (TCDatabase *)databaseWithName:(NSString *)name {

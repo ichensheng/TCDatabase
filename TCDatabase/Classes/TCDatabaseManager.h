@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TCDatabase.h"
 #import "TCDatabaseDAO.h"
+#import "TCDynamicDAO.h"
 #import "TCDatabaseProvider.h"
 
 static NSString * const kUserDatabaseName = @"user_database";
@@ -48,6 +49,15 @@ static NSString * const kSystemDatabaseName = @"system_database";
  *  @return TCDatabaseDAO
  */
 - (TCDatabaseDAO *)sysDatabaseDAO:(NSString *)table;
+
+/**
+ *  获取用户数据库动态表访问对象
+ *
+ *  @param table 表名
+ *
+ *  @return TCDynamicDAO
+ */
+- (TCDynamicDAO *)dynamicDatabaseDAO:(NSString *)table;
 
 @end
 

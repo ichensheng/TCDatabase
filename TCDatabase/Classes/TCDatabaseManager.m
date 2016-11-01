@@ -73,9 +73,9 @@
     NSString *uppercaseTable = [table uppercaseString];
     TCDatabaseDAO *databaseDAO = self.userDAOCache[uppercaseTable];
     if (!databaseDAO) {
-        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table
-                                              databaseName:kUserDatabaseName
-                                                  provider:self];
+        databaseDAO = [TCDatabaseDAO daoWithTable:table
+                                     databaseName:kUserDatabaseName
+                                         provider:self];
         self.userDAOCache[uppercaseTable] = databaseDAO;
     }
     return databaseDAO;
@@ -92,12 +92,25 @@
     NSString *uppercaseTable = [table uppercaseString];
     TCDatabaseDAO *databaseDAO = self.systemDAOCache[uppercaseTable];
     if (!databaseDAO) {
-        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table
-                                              databaseName:kSystemDatabaseName
-                                                  provider:self];
+        databaseDAO = [TCDatabaseDAO daoWithTable:table
+                                     databaseName:kSystemDatabaseName
+                                         provider:self];
         self.systemDAOCache[uppercaseTable] = databaseDAO;
     }
     return databaseDAO;
+}
+
+/**
+ *  获取用户数据库动态表访问对象
+ *
+ *  @param table 表名
+ *
+ *  @return TCDynamicDAO
+ */
+- (TCDynamicDAO *)dynamicDatabaseDAO:(NSString *)table {
+    return [TCDynamicDAO daoWithTable:table
+                         databaseName:kUserDatabaseName
+                             provider:self];
 }
 
 #pragma mark TCDatabaseProvider

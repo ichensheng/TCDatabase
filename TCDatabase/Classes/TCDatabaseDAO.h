@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TCDatabase.h"
+#import "TCDatabaseProvider.h"
 
 @class TCSqlBean;
 @class UIColor;
@@ -25,24 +26,28 @@
 /**
  *  指定数据库和表构造DAO
  *
- *  @param table    表名
- *  @param database 数据库
+ *  @param table        表名
+ *  @param databaseName 数据库名
+ *  @param provider     数据库对象provider
  *
  *  @return DAO实例
  */
 - (instancetype)initWithTable:(NSString *)table
-                   atDatabase:(TCDatabase *)database;
+                 databaseName:(NSString *)databaseName
+                     provider:(id<TCDatabaseProvider>)provider;
 
 /**
  *  指定数据库和表构造DAO
  *
- *  @param table    表名
- *  @param database 数据库
+ *  @param table        表名
+ *  @param databaseName 数据库名
+ *  @param provider     数据库对象provider
  *
  *  @return DAO实例
  */
 + (instancetype)daoWithTable:(NSString *)table
-                  atDatabase:(TCDatabase *)database;
+                databaseName:(NSString *)databaseName
+                    provider:(id<TCDatabaseProvider>)provider;
 
 /**
  *  添加单条数据，存在则覆盖，不存在则insert

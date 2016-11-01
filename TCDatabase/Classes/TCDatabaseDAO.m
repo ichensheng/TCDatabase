@@ -20,10 +20,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 
 @interface TCDatabaseDAO()
 
-@property (nonatomic, strong, readwrite) TCDatabase *database;
 @property (nonatomic, copy, readwrite) NSString *table;
-@property (nonatomic, strong) FMDatabaseQueue *dbQueue;
-@property (nonatomic, strong) NSDictionary *tablesDef;
+@property (nonatomic, copy) NSString *databaseName;
+@property (nonatomic, strong) id<TCDatabaseProvider> provider;
 
 @end
 
@@ -42,19 +41,20 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 /**
  *  指定数据库和表构造DAO
  *
- *  @param table    表名
- *  @param database 数据库
+ *  @param table        表名
+ *  @param databaseName 数据库名
+ *  @param provider     数据库对象provider
  *
  *  @return DAO实例
  */
 - (instancetype)initWithTable:(NSString *)table
-                   atDatabase:(TCDatabase *)database {
+                 databaseName:(NSString *)databaseName
+                     provider:(id<TCDatabaseProvider>)provider {
     
     if (self = [super init]) {
-        _database = database;
-        _dbQueue = database.dbQueue;
-        _tablesDef = database.tablesDef;
         _table = [table uppercaseString];
+        _databaseName = databaseName;
+        _provider = provider;
     }
     return self;
 }
@@ -62,15 +62,19 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 /**
  *  指定数据库和表构造DAO
  *
- *  @param table    表名
- *  @param database 数据库
+ *  @param table        表名
+ *  @param databaseName 数据库名
+ *  @param provider     数据库对象provider
  *
  *  @return DAO实例
  */
 + (instancetype)daoWithTable:(NSString *)table
-                  atDatabase:(TCDatabase *)database {
+                databaseName:(NSString *)databaseName
+                    provider:(id<TCDatabaseProvider>)provider {
     
-    return [[self alloc] initWithTable:table atDatabase:database];
+    return [[self alloc] initWithTable:table
+                          databaseName:databaseName
+                              provider:provider];
 }
 
 /**
@@ -949,6 +953,18 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         workQueue = dispatch_queue_create("com.ichensheng.database.workqueue", DISPATCH_QUEUE_SERIAL);
     });
     return workQueue;
+}
+
+- (TCDatabase *)database {
+    return [self.provider databaseWithName:self.databaseName];
+}
+
+- (FMDatabaseQueue *)dbQueue {
+    return [[self database] dbQueue];
+}
+
+- (NSDictionary *)tablesDef {
+    return [[self database] tablesDef];
 }
 
 - (void)setDynamicTable:(BOOL)dynamicTable {

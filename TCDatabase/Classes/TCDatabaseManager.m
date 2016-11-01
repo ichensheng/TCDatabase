@@ -10,6 +10,7 @@
 
 @interface TCDatabaseManager()
 
+@property (nonatomic, strong) NSMutableDictionary *databases;
 @property (nonatomic, strong) NSMutableDictionary *userDAOCache;
 @property (nonatomic, strong) NSMutableDictionary *systemDAOCache;
 
@@ -45,8 +46,10 @@
     NSString *userTableBundleName = [self.delegate userTableBundleName];
     NSString *systemDbFilePath = [self.delegate systemDbFilePath];
     NSString *systemTableBundleName = [self.delegate systemTableBundleName];
-    self.userDatabase = [[TCDatabase alloc] initWithPath:userDbFilePath tableBundle:userTableBundleName];
-    self.systemDatabase = [[TCDatabase alloc] initWithPath:systemDbFilePath tableBundle:systemTableBundleName];
+    TCDatabase *userDatabase = [[TCDatabase alloc] initWithPath:userDbFilePath tableBundle:userTableBundleName];
+    TCDatabase *systemDatabase = [[TCDatabase alloc] initWithPath:systemDbFilePath tableBundle:systemTableBundleName];
+    self.databases[kUserDatabaseName] = userDatabase;
+    self.databases[kSystemDatabaseName] = systemDatabase;
 }
 
 /**
@@ -54,10 +57,7 @@
  */
 - (void)closeDatabase {
     NSLog(@"关闭数据库");
-    [self.userDatabase close];
-    [self.systemDatabase close];
-    self.userDatabase = nil;
-    self.systemDatabase = nil;
+    self.databases = nil;
     self.userDAOCache = nil;
     self.systemDAOCache = nil;
 }
@@ -73,7 +73,9 @@
     NSString *uppercaseTable = [table uppercaseString];
     TCDatabaseDAO *databaseDAO = self.userDAOCache[uppercaseTable];
     if (!databaseDAO) {
-        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table atDatabase:self.userDatabase];
+        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table
+                                              databaseName:kUserDatabaseName
+                                                  provider:self];
         self.userDAOCache[uppercaseTable] = databaseDAO;
     }
     return databaseDAO;
@@ -90,10 +92,18 @@
     NSString *uppercaseTable = [table uppercaseString];
     TCDatabaseDAO *databaseDAO = self.systemDAOCache[uppercaseTable];
     if (!databaseDAO) {
-        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table atDatabase:self.systemDatabase];
+        databaseDAO = [[TCDatabaseDAO alloc] initWithTable:table
+                                              databaseName:kSystemDatabaseName
+                                                  provider:self];
         self.systemDAOCache[uppercaseTable] = databaseDAO;
     }
     return databaseDAO;
+}
+
+#pragma mark TCDatabaseProvider
+
+- (TCDatabase *)databaseWithName:(NSString *)name {
+    return self.databases[name];
 }
 
 #pragma mark - Private Methods
@@ -118,6 +128,13 @@
 }
 
 #pragma mark - Getters and Setters
+
+- (NSMutableDictionary *)databases {
+    if (!_databases) {
+        _databases = [NSMutableDictionary dictionary];
+    }
+    return _databases;
+}
 
 - (NSMutableDictionary *)userDAOCache {
     if (!_userDAOCache) {

@@ -13,15 +13,17 @@
 /**
  *  指定数据库和表构造DAO
  *
- *  @param table    表名
- *  @param database 数据库
+ *  @param table        表名
+ *  @param databaseName 数据库名
+ *  @param provider     数据库对象provider
  *
  *  @return DAO实例
  */
 - (instancetype)initWithTable:(NSString *)table
-                   atDatabase:(TCDatabase *)database {
+                 databaseName:(NSString *)databaseName
+                     provider:(id<TCDatabaseProvider>)provider {
     
-    if (self = [super initWithTable:table atDatabase:database]) {
+    if (self = [super initWithTable:table databaseName:databaseName provider:provider]) {
         self.dynamicTable = YES;
     }
     return self;
@@ -30,15 +32,17 @@
 /**
  *  指定数据库和表构造DAO
  *
- *  @param table    表名
- *  @param database 数据库
+ *  @param table        表名
+ *  @param databaseName 数据库名
+ *  @param provider     数据库对象provider
  *
  *  @return DAO实例
  */
 + (instancetype)daoWithTable:(NSString *)table
-                  atDatabase:(TCDatabase *)database {
+                databaseName:(NSString *)databaseName
+                    provider:(id<TCDatabaseProvider>)provider {
     
-    TCDynamicDAO *dao = [super daoWithTable:table atDatabase:database];
+    TCDynamicDAO *dao = [super daoWithTable:table databaseName:databaseName provider:provider];
     dao.dynamicTable = YES;
     return dao;
 }

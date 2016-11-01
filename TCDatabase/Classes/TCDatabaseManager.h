@@ -9,14 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "TCDatabase.h"
 #import "TCDatabaseDAO.h"
+#import "TCDatabaseProvider.h"
+
+static NSString * const kUserDatabaseName = @"user_database";
+static NSString * const kSystemDatabaseName = @"system_database";
 
 @protocol TCDatabaseManagerDelegate;
-@interface TCDatabaseManager : NSObject
+@interface TCDatabaseManager : NSObject <TCDatabaseProvider>
 
 @property (nonatomic, weak) id<TCDatabaseManagerDelegate> delegate;
-
-@property (nonatomic, strong) TCDatabase *userDatabase;
-@property (nonatomic, strong) TCDatabase *systemDatabase;
 
 + (instancetype)sharedInstance;
 

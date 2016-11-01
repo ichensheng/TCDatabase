@@ -57,6 +57,7 @@
 		34A2DB741D0D038B0043CF34 /* TCSimpleTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCSimpleTokenizer.h; sourceTree = "<group>"; };
 		34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCSimpleTokenizer.m; sourceTree = "<group>"; };
 		34A2DB761D0D038B0043CF34 /* stopWords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stopWords.txt; sourceTree = "<group>"; };
+		34BB70531DC868D300B96834 /* TCDatabaseProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabaseProvider.h; sourceTree = "<group>"; };
 		34C96F641D506D6E0010FFAC /* TCDynamicDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDynamicDAO.h; sourceTree = "<group>"; };
 		34C96F651D506D6E0010FFAC /* TCDynamicDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDynamicDAO.m; sourceTree = "<group>"; };
 		34FD72561CEB46610056112B /* TCDatabase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCDatabase.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +116,7 @@
 				34C96F651D506D6E0010FFAC /* TCDynamicDAO.m */,
 				34A2DB741D0D038B0043CF34 /* TCSimpleTokenizer.h */,
 				34A2DB751D0D038B0043CF34 /* TCSimpleTokenizer.m */,
+				34BB70531DC868D300B96834 /* TCDatabaseProvider.h */,
 				348F31541D0EC64A00CEE872 /* TCDatabaseManager.h */,
 				348F31551D0EC64A00CEE872 /* TCDatabaseManager.m */,
 				34A2DB761D0D038B0043CF34 /* stopWords.txt */,

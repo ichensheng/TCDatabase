@@ -90,7 +90,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)save:(NSDictionary *)data {
     __block BOOL success = NO;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         success = [self save:data withDb:db];
     }];
     return success;
@@ -109,7 +109,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)saveList:(NSArray *)dataList {
     __block BOOL success = NO;
-    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+    [[self dbQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (dataList.count > 0) {
             [self preprocess:db withData:dataList[0]];
         } else {
@@ -137,7 +137,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)saveOrUpdate:(NSDictionary *)data {
     __block BOOL success = NO;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         success = [self saveOrUpdate:data withDb:db];
     }];
     return success;
@@ -152,7 +152,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)saveOrUpdateList:(NSArray *)dataList {
     __block BOOL success = NO;
-    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+    [[self dbQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         for (NSDictionary *data in dataList) {
             success = [self saveOrUpdate:data withDb:db];
             if (!success) {
@@ -173,7 +173,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)remove:(TCSqlBean *)sqlBean {
     __block BOOL success = NO;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         [self preprocess:db];
         NSString *deleteSql = [self deleteSqlFromSqlBean:sqlBean];
         NSArray *preValues = [sqlBean.dictionary objectForKey:PRE_VALUES];
@@ -191,7 +191,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 删除成功返回YES，否则返回NO
  */
 - (BOOL)removeById:(NSString *)pk {
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
         keyName = kDynamicKey;
@@ -212,7 +212,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     if (!pks || [pks count] == 0) {
         return YES;
     }
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
         keyName = kDynamicKey;
@@ -233,7 +233,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     if (!dataList || [dataList count] == 0) {
         return YES;
     }
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     NSMutableArray *pks = [NSMutableArray array];
     for (NSDictionary *data in dataList) {
@@ -255,7 +255,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)update:(NSDictionary *)data bySqlBean:(TCSqlBean *)sqlBean {
     __block BOOL success = NO;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         success = [self update:data bySqlBean:sqlBean withDb:db];
     }];
     return success;
@@ -271,7 +271,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)update:(NSDictionary *)data byId:(NSString *)pk {
     __block BOOL success = NO;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         success = [self update:data byId:pk withDb:db];
     }];
     return success;
@@ -289,7 +289,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         sqlBean = [TCSqlBean instance];
     }
     __block NSArray *results = nil;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         results = [self query:sqlBean withDb:db];
     }];
     return results;
@@ -304,7 +304,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (NSArray *)queryBySql:(NSString *)sql {
     __block NSMutableArray *results = [NSMutableArray array];
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         FMResultSet *rs = [db executeQuery:sql];
         while ([rs next]) {
             [results addObject:[self replaceNull:[rs resultDictionary]]];
@@ -347,7 +347,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (NSDictionary *)queryById:(NSString *)pk {
     __block NSDictionary *data = nil;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         data = [self queryById:pk withDb:db];
     }];
     return data;
@@ -362,7 +362,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (NSInteger)count:(TCSqlBean *)sqlBean {
     __block NSInteger count = 0;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
         NSArray *preValues = [sqlBean.dictionary objectForKey:PRE_VALUES];
         FMResultSet *rs = [db executeQuery:[self countSqlFromSqlBean:sqlBean] withArgumentsInArray:preValues];
         if (rs) {
@@ -403,9 +403,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         fields = mutableFields;
     }
     __block NSMutableArray *searchResults = [NSMutableArray array];
-    NSDictionary *tableDefinition = self.tablesDef[self.table];
+    NSDictionary *tableDefinition = [self tablesDef][self.table];
     if (tableDefinition[@"fts"]) {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [[self dbQueue] inDatabase:^(FMDatabase *db) {
             [self preprocess:db];
             NSString *searchSql = [NSString stringWithFormat:@"SELECT (SELECTS) FROM %@ WHERE ", self.table];
             NSMutableString *matchSql = [[NSMutableString alloc] init];
@@ -465,7 +465,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         return @"*";
     }
     NSMutableString *selects = [[NSMutableString alloc] init];
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSArray *cols = tableDef[@"cols"];
     NSInteger count = cols.count;
     for (NSInteger i = 0; i < count; i++) {
@@ -620,7 +620,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 成功返回YES，失败返回NO
  */
 - (BOOL)saveOrUpdate:(NSDictionary *)data withDb:(FMDatabase *)db {
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [[tableDef objectForKey:@"key"] uppercaseString];
     BOOL update = NO; // 是否是update
     if (data[keyName]) {
@@ -655,7 +655,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 返回查询结果，不存在则返回nil
  */
 - (NSDictionary *)queryById:(NSString *)pk withDb:(FMDatabase *)db {
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
         keyName = kDynamicKey;
@@ -705,7 +705,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 更新成功返回YES，否则返回NO
  */
 - (BOOL)update:(NSDictionary *)data byId:(NSString *)pk withDb:(FMDatabase *)db {
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
         keyName = kDynamicKey;
@@ -726,7 +726,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         [db setShouldCacheStatements:YES];
     }
     if (self.isDynamicTable) {
-        [self.database checkDynamicTable:self.table data:data withDb:db];
+        [[self database] checkDynamicTable:self.table data:data withDb:db];
     }
 }
 
@@ -748,7 +748,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 插入语句
  */
 - (NSString *)replaceSqlForData:(NSDictionary *)data insertValues:(NSMutableArray *)insertValues batchSql:(BOOL)batch {
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSArray *columns = [tableDef objectForKey:@"columnNames"];
     NSMutableDictionary *mutableData = [self modifyData:data byColumns:columns];
     NSString *keyName = [tableDef objectForKey:@"key"];
@@ -807,7 +807,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 更新语句
  */
 - (NSString *)updateSqlForData:(NSDictionary *)data updateValues:(NSMutableArray *)updateValues {
-    NSDictionary *tableDef = [self.tablesDef objectForKey:[self.table uppercaseString]];
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSArray *columns = [tableDef objectForKey:@"columnNames"];
     NSMutableDictionary *mutableData = [self modifyData:data byColumns:columns];
     NSString *keyName = [tableDef objectForKey:@"key"];

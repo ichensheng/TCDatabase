@@ -354,6 +354,24 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
+ *  按照数据主键数组查询
+ *
+ *  @param pks 主键数组
+ *
+ *  @return 返回查询结果，不存在则返回nil
+ */
+- (NSArray *)queryByIdList:(NSArray *)pks {
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
+    NSString *keyName = [tableDef objectForKey:@"key"];
+    if (!keyName && self.isDynamicTable) {
+        keyName = kDynamicKey;
+    }
+    TCSqlBean *sqlBean = [TCSqlBean instance];
+    [sqlBean andIn:keyName values:pks];
+    return [self query:sqlBean];
+}
+
+/**
  *  给定条件数据的条数
  *
  *  @param sqlBean 条件
@@ -1329,6 +1347,15 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (void)limit:(NSUInteger)count offset:(NSUInteger)offset {
     NSString *limitOffset = [NSString stringWithFormat:@" limit %ld offset %ld", (long)count, (long)offset];
     [self.dictionary setObject:limitOffset forKey:LIMIT_OFFSET];
+}
+
+/**
+ *  指定获取哪几条数据，默认便宜量为0
+ *
+ *  @param count  获取条数
+ */
+- (void)limit:(NSUInteger)count {
+    [self limit:count offset:0];
 }
 
 /**

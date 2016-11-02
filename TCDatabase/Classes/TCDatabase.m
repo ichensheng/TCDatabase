@@ -444,13 +444,13 @@ static FMStopWordTokenizer *stopTok;
  */
 - (BOOL)existsTables:(NSArray *)tableNames withDb:(FMDatabase *)db {
     NSMutableString *sql = [[NSMutableString alloc] init];
-    [sql appendString:@"select count(*) as 'count' from sqlite_master where type ='table' and name in ("];
+    [sql appendString:@"select count(*) as 'count' from sqlite_master where type ='table' and upper(name) in ("];
     NSInteger tableNameCount = tableNames.count;
     for (NSInteger i = 0; i < tableNameCount; i++) {
         if (i == tableNameCount - 1) {
-            [sql appendFormat:@"'%@')", tableNames[i]];
+            [sql appendFormat:@"'%@')", [tableNames[i] uppercaseString]];
         } else {
-            [sql appendFormat:@"'%@', ", tableNames[i]];
+            [sql appendFormat:@"'%@', ", [tableNames[i] uppercaseString]];
         }
     }
     FMResultSet *rs = [db executeQuery:sql withArgumentsInArray:tableNames];

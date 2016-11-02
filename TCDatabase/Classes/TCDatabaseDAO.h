@@ -193,6 +193,15 @@
 - (NSDictionary *)queryById:(NSString *)pk;
 
 /**
+ *  按照数据主键数组查询
+ *
+ *  @param pks 主键数组
+ *
+ *  @return 返回查询结果，不存在则返回nil
+ */
+- (NSArray *)queryByIdList:(NSArray *)pks;
+
+/**
  *  给定条件数据的条数
  *
  *  @param sqlBean 条件
@@ -474,6 +483,13 @@
  *  @param offset 偏移量
  */
 - (void)limit:(NSUInteger)count offset:(NSUInteger)offset;
+
+/**
+ *  指定获取哪几条数据，默认便宜量为0
+ *
+ *  @param count  获取条数
+ */
+- (void)limit:(NSUInteger)count;
 
 /**
  *  设置分页参数

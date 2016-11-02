@@ -859,17 +859,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  * 处理下需要保存的字段值
  */
 - (NSString *)cleanColumnValue:(NSString *)value {
-    /**
-     * 单引号转义
-     */
-    if ([value isKindOfClass:[NSString class]]) {
-        value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"\'"];
-    }
-    
-    /**
-     * 对象序列化
-     */
-    if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) {
+    if ([value isKindOfClass:[NSString class]] && [value containsString:@"'"]) { // 处理单引号
+        value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    } else if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) { // 对象序列化
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
                                                            options:NSJSONWritingPrettyPrinted

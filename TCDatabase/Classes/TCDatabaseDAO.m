@@ -782,9 +782,35 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         NSString *columnName =  columns[i];
         NSString *value = [mutableData objectForKey:columnName];
         
-        // 忽略无数据column
+        /**
+         * 忽略无数据column
+         */
         if (!value) {
             continue;
+        }
+        
+        /**
+         * 单引号转义
+         */
+        if ([value isKindOfClass:[NSString class]]) {
+            value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"\'"];
+        }
+        
+        /**
+         * 对象序列化
+         */
+        if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) {
+            NSError *error;
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                               options:NSJSONWritingPrettyPrinted
+                                                                 error:&error];
+            NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                         encoding:NSUTF8StringEncoding];
+            if (error) {
+                NSLog(@"%@", error);
+            } else {
+                value = jsonString;
+            }
         }
         
         if (insertKey.length > 0) {

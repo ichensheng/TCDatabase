@@ -789,29 +789,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
             continue;
         }
         
-        /**
-         * 单引号转义
-         */
-        if ([value isKindOfClass:[NSString class]]) {
-            value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"\'"];
-        }
-        
-        /**
-         * 对象序列化
-         */
-        if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) {
-            NSError *error;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
-                                                               options:NSJSONWritingPrettyPrinted
-                                                                 error:&error];
-            NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                         encoding:NSUTF8StringEncoding];
-            if (error) {
-                NSLog(@"%@", error);
-            } else {
-                value = jsonString;
-            }
-        }
+        value = [self cleanColumnValue:value];
         
         if (insertKey.length > 0) {
             [insertKey appendString:@","];
@@ -863,6 +841,8 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         if (!value) {
             continue;
         }
+
+        value = [self cleanColumnValue:value];
         
         if (![columnName isEqualToString:keyName]) { // 忽略主键
             if (updateKey.length > 0) {
@@ -873,6 +853,36 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         }
     }
     return [NSString stringWithFormat:@"update %@ set %@", self.table, updateKey];
+}
+
+/**
+ * 处理下需要保存的字段值
+ */
+- (NSString *)cleanColumnValue:(NSString *)value {
+    /**
+     * 单引号转义
+     */
+    if ([value isKindOfClass:[NSString class]]) {
+        value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"\'"];
+    }
+    
+    /**
+     * 对象序列化
+     */
+    if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) {
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                     encoding:NSUTF8StringEncoding];
+        if (error) {
+            NSLog(@"%@", error);
+        } else {
+            value = jsonString;
+        }
+    }
+    return value;
 }
 
 /**

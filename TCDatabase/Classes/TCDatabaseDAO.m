@@ -88,12 +88,34 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *
  *  @return 保存成功返回YES，否则返回NO
  */
-- (BOOL)save:(NSDictionary *)data {
+- (BOOL)replace:(NSDictionary *)data {
     __block BOOL success = NO;
     [[self dbQueue] inDatabase:^(FMDatabase *db) {
         success = [self save:data withDb:db];
     }];
     return success;
+}
+
+/**
+ *  添加单条数据，该方法实际调用的是saveOrUpdate:
+ *
+ *  @param data 数据对象
+ *
+ *  @return 保存成功返回YES，否则返回NO
+ */
+- (BOOL)save:(NSDictionary *)data {
+    return [self saveOrUpdate:data];
+}
+
+/**
+ *  添加多条数据，该方法实际调用的是saveOrUpdateList:
+ *
+ *  @param dataList 数据数组
+ *
+ *  @return 保存成功返回YES，否则返回NO
+ */
+- (BOOL)saveList:(NSArray *)dataList {
+    return [self saveOrUpdateList:dataList];
 }
 
 /**
@@ -107,7 +129,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *
  *  @return 保存成功返回YES，否则返回NO
  */
-- (BOOL)saveList:(NSArray *)dataList {
+- (BOOL)batchSave:(NSArray *)dataList {
     __block BOOL success = NO;
     [[self dbQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (dataList.count > 0) {
@@ -620,6 +642,10 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     NSString *where = [sqlBean.dictionary objectForKey:WHERE];
     NSMutableArray *updateValues = [NSMutableArray array];
     NSString *updateSql = [self updateSqlForData:data updateValues:updateValues];
+    if (updateValues.count == 0) {
+        NSLog(@"没有需要更新的值");
+        return YES;
+    }
     if (where.length > 0) {
         updateSql = [NSString stringWithFormat:@"%@ where 1=1%@", updateSql, where];
     }

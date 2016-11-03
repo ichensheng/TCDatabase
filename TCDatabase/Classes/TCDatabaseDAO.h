@@ -60,7 +60,25 @@
  *
  *  @return 保存成功返回YES，否则返回NO
  */
+- (BOOL)replace:(NSDictionary *)data;
+
+/**
+ *  添加单条数据，该方法实际调用的是saveOrUpdate:
+ *
+ *  @param data 数据对象
+ *
+ *  @return 保存成功返回YES，否则返回NO
+ */
 - (BOOL)save:(NSDictionary *)data;
+
+/**
+ *  添加多条数据，该方法实际调用的是saveOrUpdateList:
+ *
+ *  @param dataList 数据数组
+ *
+ *  @return 保存成功返回YES，否则返回NO
+ */
+- (BOOL)saveList:(NSArray *)dataList;
 
 /**
  *  添加多条数据，存在则覆盖，不存在则insert
@@ -73,7 +91,7 @@
  *
  *  @return 保存成功返回YES，否则返回NO
  */
-- (BOOL)saveList:(NSArray *)dataList;
+- (BOOL)batchSave:(NSArray *)dataList;
 
 /**
  *  如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法

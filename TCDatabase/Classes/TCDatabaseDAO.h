@@ -371,6 +371,14 @@
 - (void)andNotNull:(NSString *)field;
 
 /**
+ *  增加复杂语句的支持
+ *
+ *  @param subSql 例如：and (a=? and b=?)或者更加复杂的查询
+ *  @param values 问号对应的值数组
+ */
+- (void)subSql:(NSString *)subSql values:(NSArray *)values;
+
+/**
  *  增加'or'关系过滤项
  *
  *  @param field 字段

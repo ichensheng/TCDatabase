@@ -213,6 +213,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 删除成功返回YES，否则返回NO
  */
 - (BOOL)removeById:(NSString *)pk {
+    if (!pk) {
+        return NO;
+    }
     NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
@@ -699,6 +702,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 返回查询结果，不存在则返回nil
  */
 - (NSDictionary *)queryById:(NSString *)pk withDb:(FMDatabase *)db {
+    if (!pk) {
+        return nil;
+    }
     NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
@@ -749,6 +755,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 更新成功返回YES，否则返回NO
  */
 - (BOOL)update:(NSDictionary *)data byId:(NSString *)pk withDb:(FMDatabase *)db {
+    if (!pk) {
+        return NO;
+    }
     NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [tableDef objectForKey:@"key"];
     if (!keyName && self.isDynamicTable) {
@@ -1171,7 +1180,9 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (void)andIn:(NSString *)field values:(NSArray *)values {
     NSMutableArray *valueArray = [NSMutableArray array];
     for (NSString *value in values) {
-        [valueArray addObject:value];
+        if (!value) {
+            [valueArray addObject:value];
+        }
     }
     if (valueArray.count > 0) {
         [[self where] appendFormat:@" and %@ in (%@)", field, [self preIn:valueArray]];

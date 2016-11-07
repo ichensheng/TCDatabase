@@ -21,7 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [TCDatabaseManager sharedInstance].delegate = self;
-    [[TCDatabaseManager sharedInstance] openDatabase];
+    [[TCDatabaseManager sharedInstance] openUserDatabase];
     
 //    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"hahah"
 //                                            atDatabase:userDatabase];

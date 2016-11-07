@@ -39,26 +39,42 @@
 /**
  *  打开数据库
  */
-- (void)openDatabase {
+- (void)openUserDatabase {
     [self checkDelegate];
-    NSLog(@"打开数据库");
+    NSLog(@"打开用户数据库");
     NSString *userDbFilePath = [self.delegate userDbFilePath];
     NSString *userTableBundleName = [self.delegate userTableBundleName];
+    TCDatabase *userDatabase = [[TCDatabase alloc] initWithPath:userDbFilePath tableBundle:userTableBundleName];
+    self.databases[kUserDatabaseName] = userDatabase;
+}
+
+/**
+ * 打开系统数据库
+ */
+- (void)openSysDatabase {
+    [self checkDelegate];
+    NSLog(@"打开系统数据库");
     NSString *systemDbFilePath = [self.delegate systemDbFilePath];
     NSString *systemTableBundleName = [self.delegate systemTableBundleName];
-    TCDatabase *userDatabase = [[TCDatabase alloc] initWithPath:userDbFilePath tableBundle:userTableBundleName];
     TCDatabase *systemDatabase = [[TCDatabase alloc] initWithPath:systemDbFilePath tableBundle:systemTableBundleName];
-    self.databases[kUserDatabaseName] = userDatabase;
     self.databases[kSystemDatabaseName] = systemDatabase;
 }
 
 /**
- *  关闭数据库
+ *  关闭用户数据库
  */
-- (void)closeDatabase {
-    NSLog(@"关闭数据库");
-    self.databases = nil;
+- (void)closeUserDatabase {
+    NSLog(@"关闭用户数据库");
+    [self.databases removeObjectForKey:kUserDatabaseName];
     self.userDAOCache = nil;
+}
+
+/**
+ *  关闭系统数据库
+ */
+- (void)closeSysDatabase {
+    NSLog(@"关闭系统数据库");
+    [self.databases removeObjectForKey:kSystemDatabaseName];
     self.systemDAOCache = nil;
 }
 

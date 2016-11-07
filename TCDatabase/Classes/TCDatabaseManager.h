@@ -23,14 +23,24 @@ static NSString * const kSystemDatabaseName = @"system_database";
 + (instancetype)sharedInstance;
 
 /**
- *  打开数据库
+ *  打开用户数据库
  */
-- (void)openDatabase;
+- (void)openUserDatabase;
 
 /**
- *  关闭数据库
+ * 打开系统数据库
  */
-- (void)closeDatabase;
+- (void)openSysDatabase;
+
+/**
+ *  关闭用户数据库
+ */
+- (void)closeUserDatabase;
+
+/**
+ *  关闭系统数据库
+ */
+- (void)closeSysDatabase;
 
 /**
  *  获取用户数据库访问对象

@@ -1186,9 +1186,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (void)andIn:(NSString *)field values:(NSArray *)values {
     NSMutableArray *valueArray = [NSMutableArray array];
     for (NSString *value in values) {
-        if (value && ![self isBlankString:value]) {
-            [valueArray addObject:value];
-        }
+        [valueArray addObject:value];
     }
     if (valueArray.count > 0) {
         [[self where] appendFormat:@" and %@ in (%@)", field, [self preIn:valueArray]];
@@ -1519,26 +1517,5 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     }
     return [mutableString substringWithRange:NSMakeRange(0, mutableString.length - 1)];
 }
-
-
-/**
- 字符串非空判定
-
- @param string 需要判断的字符串
- @return 判断结果
- */
-- (BOOL)isBlankString:(NSString *)string {
-    if (string == nil || string == NULL) {
-        return YES;
-    }
-    if ([string isKindOfClass:[NSNull class]]) {
-        return YES;
-    }
-    if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0) {
-        return YES;
-    }
-    return NO;
-}
-
 
 @end

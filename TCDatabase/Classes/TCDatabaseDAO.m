@@ -1186,7 +1186,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (void)andIn:(NSString *)field values:(NSArray *)values {
     NSMutableArray *valueArray = [NSMutableArray array];
     for (NSString *value in values) {
-        if (!value) {
+        if (value && !value && value.length > 0) {
             [valueArray addObject:value];
         }
     }

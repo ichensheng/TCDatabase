@@ -40,6 +40,9 @@
  *  打开数据库
  */
 - (void)openUserDatabase {
+    if (self.databases[kUserDatabaseName]) {
+        return;
+    }
     [self checkDelegate];
     NSLog(@"打开用户数据库");
     NSString *userDbFilePath = [self.delegate userDbFilePath];
@@ -52,6 +55,9 @@
  * 打开系统数据库
  */
 - (void)openSysDatabase {
+    if (self.databases[kSystemDatabaseName]) {
+        return;
+    }
     [self checkDelegate];
     NSLog(@"打开系统数据库");
     NSString *systemDbFilePath = [self.delegate systemDbFilePath];

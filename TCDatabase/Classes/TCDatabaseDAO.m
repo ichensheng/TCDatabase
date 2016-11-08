@@ -857,7 +857,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @return 删除语句
  */
 - (NSString *)deleteSqlFromSqlBean:(TCSqlBean *)sqlBean {
-    NSString *where = [sqlBean.dictionary objectForKey:WHERE]?:@"";
+    NSString *where = [sqlBean.dictionary objectForKey:WHERE] ?: @"";
     return [NSString stringWithFormat:@"delete from %@ where 1=1%@", self.table, where];
 }
 

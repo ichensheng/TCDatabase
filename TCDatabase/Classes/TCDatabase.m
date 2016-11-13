@@ -10,6 +10,7 @@
 #import "FMTokenizers.h"
 #import "TCSimpleTokenizer.h"
 #import "FCFileManager.h"
+#import "sqlite3.h"
 
 static NSString * const kSavedAppVersionKey = @"__APP_VERSION__";               // 保存的版本号
 static NSString * const kLastReleaseSpaceTimeKey = @"lastReleaseSpaceTimeKey";  // 上一次清理SQLite的时间
@@ -156,14 +157,13 @@ static FMStopWordTokenizer *stopTok;
  */
 - (void)createDBQueueWithPath:(NSString *)dbPath {
     if (dbPath) {
-        if ([FCFileManager existsItemAtPath:dbPath]) {
-            _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
-        } else {
+        if (![FCFileManager existsItemAtPath:dbPath]) {
             [FCFileManager createDirectoriesForFileAtPath:dbPath];
-            [self makeProtectionNoneForFile:dbPath];
-            _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
         }
-        
+        [self makeProtectionNoneForFile:dbPath];
+        int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FILEPROTECTION_NONE;
+        _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath flags:flags];
+
         /**
          *  递归直到成功
          */
@@ -278,7 +278,9 @@ static FMStopWordTokenizer *stopTok;
     __block NSMutableArray *tableDefArray = [NSMutableArray array];
     [tableFiles enumerateObjectsUsingBlock:^(NSString *path, NSUInteger idx, BOOL *stop) {
         NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
-        NSDictionary *tableDef = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *tableDef = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                 options:NSJSONReadingMutableContainers
+                                                                   error:nil];
         if (tableDef) {
             [tableDefArray addObject:[self modifyTableDef:tableDef]];
         } else {
@@ -361,7 +363,7 @@ static FMStopWordTokenizer *stopTok;
             }
             
             NSString *alertSQL = [NSString stringWithFormat:@"alter table %@ add column %@", tableName, addColumePars];
-            NSString *initValue = [columnType isEqualToString:@"INTEGER"] ? @"0":@"''";
+            NSString *initValue = [[columnType uppercaseString] isEqualToString:@"INTEGER"] ? @"0":@"''";
             NSString *initColumnValue = [NSString stringWithFormat:@"update %@ set %@=%@", tableName, columnName, initValue];
             BOOL success = [db executeUpdate:alertSQL];
             if (success) {

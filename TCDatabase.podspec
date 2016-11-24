@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TCDatabase"
-  s.version      = "0.2.5"
+  s.version      = "0.2.6"
   s.summary      = "封装FMDB，支持全文检索、支持条件对象查询、支持定时收回SQLite空间、支持JSON定义表、自动增加表字段等"
   s.homepage     = "https://github.com/ichensheng/TCDatabase"
   s.license      = "Apache"
@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
 	s.resources 	 = "TCDatabase/Classes/*.txt"
   s.requires_arc = true
   s.dependency "FMDB/FTS", "~> 2.6.2"
-	s.dependency "FCFileManager", "~> 1.0.17"
+	s.dependency "FCFileManager", "~> 1.0.18"
 end

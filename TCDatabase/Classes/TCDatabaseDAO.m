@@ -901,7 +901,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (NSString *)cleanColumnValue:(NSString *)value {
     if ([value isKindOfClass:[NSString class]] && [value containsString:@"'"]) { // 处理单引号
-        value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
     } else if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) { // 对象序列化
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value

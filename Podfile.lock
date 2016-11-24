@@ -1,5 +1,5 @@
 PODS:
-  - FCFileManager (1.0.17)
+  - FCFileManager (1.0.18)
   - FMDB/FTS (2.6.2):
     - FMDB/standard
   - FMDB/standard (2.6.2)
@@ -9,7 +9,7 @@ DEPENDENCIES:
   - FMDB/FTS (= 2.6.2)
 
 SPEC CHECKSUMS:
-  FCFileManager: 8bfc931ce2a6223676147e9baf0e8a65c691eca6
+  FCFileManager: 3d13576da1f709d37460bd7669cdf07b9d6d8bc3
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
 
 PODFILE CHECKSUM: c5a660a18115c81d389ad9f0f18b9beb936d6c37

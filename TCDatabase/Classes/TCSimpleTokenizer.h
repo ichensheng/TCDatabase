@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FMTokenizers.h"
+#import <FMDB/FMTokenizers.h>
 
 @interface TCSimpleTokenizer : FMSimpleTokenizer
 

@@ -7,7 +7,7 @@
 //
 
 #import "TCSimpleTokenizer.h"
-#import "FMDatabase+FTS3.h"
+#import <FMDB/FMDatabase+FTS3.h>
 
 @implementation TCSimpleTokenizer
 

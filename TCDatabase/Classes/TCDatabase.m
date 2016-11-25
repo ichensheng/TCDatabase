@@ -7,10 +7,10 @@
 //
 
 #import "TCDatabase.h"
-#import "FMTokenizers.h"
+#import <FMDB/FMTokenizers.h>
 #import "TCSimpleTokenizer.h"
-#import "FCFileManager.h"
-#import "sqlite3.h"
+#import <FCFileManager/FCFileManager.h>
+#import <sqlite3.h>
 
 static NSString * const kSavedAppVersionKey = @"__APP_VERSION__";               // 保存的版本号
 static NSString * const kLastReleaseSpaceTimeKey = @"lastReleaseSpaceTimeKey";  // 上一次清理SQLite的时间

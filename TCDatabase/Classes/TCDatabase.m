@@ -222,6 +222,10 @@ static FMStopWordTokenizer *stopTok;
             }
         }
 #endif
+        // 创建字段索引
+        if (def[@"indexs"]) {
+            [self createColumnIndex:def[@"indexs"] onTable:def[@"table"]];
+        }
     }];
     NSLog(@"完成数据库升级");
 }
@@ -339,7 +343,7 @@ static FMStopWordTokenizer *stopTok;
         NSString *columnName = [columnDef objectForKey:@"name"];
         NSString *columnType = [columnDef objectForKey:@"type"];
         NSString *isNotNull = [columnDef objectForKey:@"isNotNull"];
-        NSString *isUnique = [columnDef objectForKey:@"isUnique"];
+        Boolean isUnique = [[columnDef objectForKey:@"isUnique"] boolValue];
         NSString *checkValue = [columnDef objectForKey:@"checkValue"];
         NSString *defaultValue = [columnDef objectForKey:@"defaultValue"];
         
@@ -714,6 +718,7 @@ static FMStopWordTokenizer *stopTok;
     newTableDef[@"comment"] = tableDef[@"comment"];
     newTableDef[@"key"] = [tableDef[@"key"] uppercaseString];
     newTableDef[@"fts"] = [tableDef[@"fts"] uppercaseString];
+    newTableDef[@"indexs"] = tableDef[@"indexs"];
     NSMutableArray *newColsDef = [NSMutableArray array];
     newTableDef[@"cols"] = newColsDef;
     for (NSDictionary *colDef in tableDef[@"cols"]) {
@@ -722,6 +727,40 @@ static FMStopWordTokenizer *stopTok;
         [newColsDef addObject:newColDef];
     }
     return newTableDef;
+}
+        
+- (BOOL)createColumnIndex:(NSArray *)indexs onTable:(NSString *)tableName {
+    __block BOOL executed = YES;
+    [indexs enumerateObjectsUsingBlock:^(NSDictionary *index, NSUInteger idx, BOOL *stop) {
+        [self.dbQueue inDatabase:^(FMDatabase *db) {
+            NSArray *columnNames = index[@"columns"];
+            NSString *indexName = index[@"name"];
+            NSString *existsIndexSql =
+            [NSString stringWithFormat:@"SELECT count(*) as 'count' FROM sqlite_master WHERE type='index' and name='%@'", indexName];
+            FMResultSet *rs = [db executeQuery:existsIndexSql];
+            BOOL ifExists = NO;
+            while ([rs next]) {
+                NSInteger count = [rs intForColumn:@"count"];
+                if (count > 0) {
+                    ifExists = YES;
+                }
+            }
+            if (!ifExists) {
+                NSMutableString *createIndexSql =
+                [[NSMutableString alloc] initWithFormat:@"CREATE INDEX %@ ON %@ (", indexName, tableName];
+                [columnNames enumerateObjectsUsingBlock:^(NSString *columnName, NSUInteger idx, BOOL *stop) {
+                    [createIndexSql appendFormat:@"%@,", columnName];
+                }];
+                [createIndexSql deleteCharactersInRange:NSMakeRange(createIndexSql.length - 1, 1)];
+                [createIndexSql appendString:@")"];
+                executed = [db executeUpdate:createIndexSql];
+                if (!executed) {
+                    *stop = YES;
+                }
+            }
+        }];
+    }];
+    return executed;
 }
 
 /**

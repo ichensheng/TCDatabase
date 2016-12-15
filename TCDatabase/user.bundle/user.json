@@ -4,5 +4,6 @@
     "key": "USER_CODE",
     "cols": [{"name": "USER_CODE", "type": "TEXT"},
              {"name": "USER_NAME", "type": "TEXT"},
-             {"name": "USER_SEX", "type": "TEXT"}]
+             {"name": "USER_SEX", "type": "TEXT"}],
+    "indexs": [{"columns":["USER_CODE", "USER_NAME"], "name":"IDX_USER_NAME"}]
 }

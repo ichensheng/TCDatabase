@@ -38,7 +38,7 @@
     dispatch_async(TCDatabaseDAO.workQueue, ^{
         NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
         NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
-        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"王二", @"USER_SEX":@"男"};
+        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
         NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
         
        [userDAO saveList:@[user1, user2, user3, user4]];

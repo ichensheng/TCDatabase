@@ -12,7 +12,7 @@
 #import <FCFileManager/FCFileManager.h>
 #import <sqlite3.h>
 
-static NSString * const kSavedAppVersionKey = @"__APP_VERSION__";               // 保存的版本号
+static NSString * const kSavedAppVersionKeyPrefix = @"__APP_VERSION__";         // 保存的版本号前缀
 static NSString * const kLastReleaseSpaceTimeKey = @"lastReleaseSpaceTimeKey";  // 上一次清理SQLite的时间
 static NSString * const kTimeFormat = @"yyyy-MM-dd HH:mm:ss:SSS";               // 时间戳格式
 static const NSInteger kReleaseSpaceAge = 7 * 24 * 60 * 60;                     // 清理SQLite存储空间周期，1周
@@ -48,9 +48,15 @@ static FMStopWordTokenizer *stopTok;
         [self updateDatabase];                  // 更新数据库
 #else
         NSString *appVersionFromBundle = [self appVersionFromBundle];
-        if (![appVersionFromBundle isEqualToString:[self appVersion]]) {
-            [self saveAppVersion:appVersionFromBundle];
-            [self updateDatabase];
+        if (![appVersionFromBundle isEqualToString:[self appVersionForPath:path]]) {
+            @try {
+                [self updateDatabase];
+                [self saveAppVersion:appVersionFromBundle forPath:path];
+            } @catch (NSException *exception) {
+                NSLog(@"数据库升级失败");
+            } @finally {
+                // do nothing
+            }
         }
 #endif
         [self releaseSpace];                    // 清理数据库存储空间
@@ -768,16 +774,18 @@ static FMStopWordTokenizer *stopTok;
  *
  *  @param appVersion 新的版本号
  */
-- (void)saveAppVersion:(NSString *)appVersion {
-    [[NSUserDefaults standardUserDefaults] setObject:appVersion forKey:kSavedAppVersionKey];
+- (void)saveAppVersion:(NSString *)appVersion forPath:(NSString *)path {
+    NSString *savedKey = [NSString stringWithFormat:@"%@_%@", kSavedAppVersionKeyPrefix, [path lastPathComponent]];
+    [[NSUserDefaults standardUserDefaults] setObject:appVersion forKey:savedKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 /**
  *  获取NSUserDefaults里存储的版本
  */
-- (NSString *)appVersion {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:kSavedAppVersionKey];
+- (NSString *)appVersionForPath:(NSString *)path {
+    NSString *savedKey = [NSString stringWithFormat:@"%@_%@", kSavedAppVersionKeyPrefix, [path lastPathComponent]];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:savedKey];
 }
 
 /**

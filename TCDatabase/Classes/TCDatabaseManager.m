@@ -148,6 +148,22 @@
                              provider:self];
 }
 
+/**
+ *  返回用户数据库，正常业务代码最好不要自己直接操作TCDatabase
+ *  直接操作容易引起dbQueue嵌套
+ */
+- (TCDatabase *)userDatabase {
+    return self.databases[kUserDatabaseName];
+}
+
+/**
+ *  返回系统数据库，正常业务代码最好不要自己直接操作TCDatabase
+ *  直接操作容易引起dbQueue嵌套
+ */
+- (TCDatabase *)sysDatabase {
+    return self.databases[kSystemDatabaseName];
+}
+
 #pragma mark TCDatabaseProvider
 
 - (TCDatabase *)databaseWithName:(NSString *)name {

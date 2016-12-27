@@ -78,6 +78,18 @@ static NSString * const kSystemDatabaseName = @"system_database";
  */
 - (TCDynamicDAO *)sysDynamicDatabaseDAO:(NSString *)table;
 
+/**
+ *  返回用户数据库，正常业务代码最好不要自己直接操作TCDatabase
+ *  直接操作容易引起dbQueue嵌套
+ */
+- (TCDatabase *)userDatabase;
+
+/**
+ *  返回系统数据库，正常业务代码最好不要自己直接操作TCDatabase
+ *  直接操作容易引起dbQueue嵌套
+ */
+- (TCDatabase *)sysDatabase;
+
 @end
 
 @protocol TCDatabaseManagerDelegate <NSObject>

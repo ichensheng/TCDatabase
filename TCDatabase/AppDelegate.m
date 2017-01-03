@@ -23,6 +23,9 @@
     [TCDatabaseManager sharedInstance].delegate = self;
     [[TCDatabaseManager sharedInstance] openUserDatabase];
     
+    TCDatabase *database = [[TCDatabaseManager sharedInstance] userDatabase];
+    NSLog(@"database: %@", database);
+    
 //    TCDynamicDAO *testDAO = [TCDynamicDAO daoWithTable:@"hahah"
 //                                            atDatabase:userDatabase];
     

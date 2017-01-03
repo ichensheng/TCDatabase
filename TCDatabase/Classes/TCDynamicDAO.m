@@ -7,6 +7,7 @@
 //
 
 #import "TCDynamicDAO.h"
+#import "TCDebug.h"
 
 @implementation TCDynamicDAO
 

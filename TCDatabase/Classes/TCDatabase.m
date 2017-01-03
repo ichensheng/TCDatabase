@@ -11,6 +11,7 @@
 #import "TCSimpleTokenizer.h"
 #import <FCFileManager/FCFileManager.h>
 #import <sqlite3.h>
+#import "TCDebug.h"
 
 static NSString * const kLastReleaseSpaceTimeKey = @"lastReleaseSpaceTimeKey";  // 上一次清理SQLite的时间
 static NSString * const kTimeFormat = @"yyyy-MM-dd HH:mm:ss:SSS";               // 时间戳格式

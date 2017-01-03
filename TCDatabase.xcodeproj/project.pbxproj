@@ -50,6 +50,7 @@
 		1215345028A8DEE41870F280 /* Pods-TCDatabase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCDatabase.release.xcconfig"; path = "Pods/Target Support Files/Pods-TCDatabase/Pods-TCDatabase.release.xcconfig"; sourceTree = "<group>"; };
 		21513BEEEEB4965F1E19DE2E /* libPods-TCDatabaseUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TCDatabaseUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		336E9CE45C187B71256D7EAA /* libPods-TCDatabaseTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TCDatabaseTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		347C36EA1E1B8837003CC79B /* TCDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TCDebug.h; sourceTree = "<group>"; };
 		348F31541D0EC64A00CEE872 /* TCDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCDatabaseManager.h; sourceTree = "<group>"; };
 		348F31551D0EC64A00CEE872 /* TCDatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCDatabaseManager.m; sourceTree = "<group>"; };
 		348F31571D0EF39E00CEE872 /* user.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = user.bundle; sourceTree = "<group>"; };
@@ -129,6 +130,7 @@
 				34BB70531DC868D300B96834 /* TCDatabaseProvider.h */,
 				348F31541D0EC64A00CEE872 /* TCDatabaseManager.h */,
 				348F31551D0EC64A00CEE872 /* TCDatabaseManager.m */,
+				347C36EA1E1B8837003CC79B /* TCDebug.h */,
 				34A2DB761D0D038B0043CF34 /* stopWords.txt */,
 			);
 			path = Classes;

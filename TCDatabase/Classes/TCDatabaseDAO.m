@@ -8,6 +8,7 @@
 
 #import "TCDatabaseDAO.h"
 #import <UIKit/UIKit.h>
+#import "TCDebug.h"
 
 static NSString * const WHERE = @"_WHERE_";                // 过滤条件
 static NSString * const GROUP = @"_GROUP_";                // 分组设置

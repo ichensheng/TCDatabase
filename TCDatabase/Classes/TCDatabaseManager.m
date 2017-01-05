@@ -7,7 +7,6 @@
 //
 
 #import "TCDatabaseManager.h"
-#import "TCDebug.h"
 
 @interface TCDatabaseManager()
 

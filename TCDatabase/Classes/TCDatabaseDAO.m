@@ -542,15 +542,18 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
                highlightColor:(UIColor *)color {
     
     NSMutableDictionary *mutableResultDict = [NSMutableDictionary dictionary];
+    NSString *uppercaseKey = nil;
+    id fieldValue = nil;
     for (NSString *key in result) {
-        id fieldValue = result[key];
+        fieldValue = result[key];
+        uppercaseKey = [key uppercaseString];
         if ([fieldValue isKindOfClass:[NSNull class]]) {
-            mutableResultDict[key] = @""; // null替换为空字符串，使得转换成模型时不崩溃
+            mutableResultDict[uppercaseKey] = @""; // null替换为空字符串，使得转换成模型时不崩溃
         } else {
-            if ([fields containsObject:key]) {
-                mutableResultDict[key] = [self highlightString:fieldValue withColor:color];
+            if ([fields containsObject:uppercaseKey]) {
+                mutableResultDict[uppercaseKey] = [self highlightString:fieldValue withColor:color];
             } else {
-                mutableResultDict[key] = fieldValue;
+                mutableResultDict[uppercaseKey] = fieldValue;
             }
         }
     }

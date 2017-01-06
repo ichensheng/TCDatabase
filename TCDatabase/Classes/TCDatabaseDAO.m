@@ -214,7 +214,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)removeById:(NSString *)pk {
 #if !DEBUG
-    if (!pk || pk.length == 0) {
+    if (!pk || ![pk isKindOfClass:[NSString class]] || pk.length == 0) {
         return NO;
     }
 #endif
@@ -705,7 +705,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (NSDictionary *)queryById:(NSString *)pk withDb:(FMDatabase *)db {
 #if !DEBUG
-    if (!pk || pk.length == 0) {
+    if (!pk || ![pk isKindOfClass:[NSString class]] || pk.length == 0) {
         return nil;
     }
 #endif
@@ -760,7 +760,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)update:(NSDictionary *)data byId:(NSString *)pk withDb:(FMDatabase *)db {
 #if !DEBUG
-    if (!pk || pk.length == 0) {
+    if (!pk || ![pk isKindOfClass:[NSString class]] || pk.length == 0) {
         return NO;
     }
 #endif

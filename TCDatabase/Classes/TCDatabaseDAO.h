@@ -379,6 +379,14 @@
 - (void)subSql:(NSString *)subSql values:(NSArray *)values;
 
 /**
+ *  增加复杂语句的支持
+ *
+ *  @param subSql 例如：and (a='1' and b='2')，调用的其实是[subSql:@"and (a='1' and b='2')" values:nil]
+ *
+ */
+- (void)subSql:(NSString *)subSql;
+
+/**
  *  增加'or'关系过滤项
  *
  *  @param field 字段

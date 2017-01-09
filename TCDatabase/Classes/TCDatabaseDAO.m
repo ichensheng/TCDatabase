@@ -1243,7 +1243,18 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 - (void)subSql:(NSString *)subSql values:(NSArray *)values {
     subSql = [subSql stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     [[self where] appendFormat:@" %@", subSql];
-    [[self vars] addObjectsFromArray:values];
+    if (values) {
+        [[self vars] addObjectsFromArray:values];
+    }
+}
+
+/**
+ *  增加复杂语句的支持
+ *
+ *  @param subSql 例如：and (a='1' and b='2')或者更加复杂的查询，不得有问号
+ */
+- (void)subSql:(NSString *)subSql {
+    [self subSql:subSql values:nil];
 }
 
 /**

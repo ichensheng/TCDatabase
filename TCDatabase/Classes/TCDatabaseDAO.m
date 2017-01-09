@@ -1334,8 +1334,12 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  *  @param value 值
  */
 - (void)orWhere:(NSString *)field op:(NSString *)op value:(NSString *)value {
-    [[self where] appendString:[NSString stringWithFormat:@" or %@ %@ ?", field, op]];
-    [[self vars] addObject:value];
+    if (field && op && value) { // 三个参数都不为nil时才拼接where条件
+        [[self where] appendString:[NSString stringWithFormat:@" or %@ %@ ?", field, op]];
+        [[self vars] addObject:value];
+    } else {
+        NSLog(@"orWhere:op:value出错：%@-%@-%@", field, op, value);
+    }
 }
 
 /**

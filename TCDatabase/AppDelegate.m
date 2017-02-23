@@ -11,6 +11,7 @@
 #import "TCDatabaseDAO.h"
 #import "TCDynamicDAO.h"
 #import "TCDatabase.h"
+#import "FCFileManager.h"
 
 @interface AppDelegate () <TCDatabaseManagerDelegate>
 
@@ -83,8 +84,8 @@
  *  @return 数据库路径
  */
 - (NSString *)userDbFilePath {
-    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    return [[url absoluteString] stringByAppendingString:@"user.db"];
+    NSString *documentPath = [FCFileManager pathForDocumentsDirectory];
+    return [documentPath stringByAppendingString:@"/user.db"];
 }
 
 /**
@@ -102,8 +103,8 @@
  *  @return 数据库路径
  */
 - (NSString *)systemDbFilePath {
-    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    return [[url absoluteString] stringByAppendingString:@"system.db"];
+    NSString *documentPath = [FCFileManager pathForDocumentsDirectory];
+    return [documentPath stringByAppendingString:@"/system.db"];
 }
 
 /**

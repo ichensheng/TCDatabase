@@ -72,6 +72,17 @@
 - (BOOL)save:(NSDictionary *)data;
 
 /**
+ *  添加单条数据，该方法实际调用的是saveOrUpdate:
+ *  返回值是字典，字典里有两个字段，一个是success：是否保存成功
+ *  newAdd：是否是新增，这两个值都是布尔值
+ *
+ *  @param data 数据对象
+ *
+ *  @return 返回字典
+ */
+- (NSDictionary *)verboseSave:(NSDictionary *)data;
+
+/**
  *  添加多条数据，该方法实际调用的是saveOrUpdateList:
  *
  *  @param dataList 数据数组
@@ -79,6 +90,18 @@
  *  @return 保存成功返回YES，否则返回NO
  */
 - (BOOL)saveList:(NSArray *)dataList;
+
+/**
+ *  添加多条数据，该方法实际调用的是saveOrUpdateList:
+ *  返回值是字典，字典里有5个字段，success：是否保存成功
+ *  newAddNum：新增几条，updateNum：更新几条，
+ *  newAddIds：[]，新增的主键，updateIds：[]，更新的主键
+ *
+ *  @param dataList 数据数组
+ *
+ *  @return 返回字典
+ */
+- (NSDictionary *)verboseSaveList:(NSArray *)dataList;
 
 /**
  *  添加多条数据，存在则覆盖，不存在则insert
@@ -94,7 +117,7 @@
 - (BOOL)batchSave:(NSArray *)dataList;
 
 /**
- *  如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法
+ *  如果data里没有主键或者主键对应的数据不存在则新增，否则修改
  *
  *  @param data 数据对象
  *
@@ -103,7 +126,7 @@
 - (BOOL)saveOrUpdate:(NSDictionary *)data;
 
 /**
- *  批量保存数据，如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法
+ *  批量保存数据，如果data里没有主键或者主键对应的数据不存在则新增，否则修改
  *
  *  @param dataList 数据数组
  *

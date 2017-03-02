@@ -18,6 +18,17 @@ static NSString * const SELECTS = @"_SELECTS_";            // 查询字段，逗
 
 static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表前缀
 
+/**
+ * verbose接口返回的值的key
+ */
+static NSString * const kSuccessKey = @"success";       // 是否保存成功
+static NSString * const kNewAddKey = @"newAdd";         // 是否新增
+static NSString * const kNewAddNumKey = @"newAddNum";   // 新增条数
+static NSString * const kUpdateNumKey = @"updateNum";   // 更新条数
+static NSString * const kNewAddIdsKey = @"newAddIds";   // 新增主键数组
+static NSString * const kUpdateIdsKey = @"updateIds";   // 更新主键数组
+static NSString * const kIdValueKey = @"idValue";       // 数据主键
+
 @interface TCDatabaseDAO()
 
 @property (nonatomic, copy, readwrite) NSString *table;
@@ -108,6 +119,21 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
+ *  添加单条数据，该方法实际调用的是saveOrUpdate:
+ *  返回值是字典，字典里有两个字段，一个是success：是否保存成功
+ *  newAdd：是否是新增，这两个值都是布尔值
+ *
+ *  @param data 数据对象
+ *
+ *  @return 返回字典
+ */
+- (NSDictionary *)verboseSave:(NSDictionary *)data {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    [self saveOrUpdate:data result:result];
+    return  result;
+}
+
+/**
  *  添加多条数据，该方法实际调用的是saveOrUpdateList:
  *
  *  @param dataList 数据数组
@@ -116,6 +142,22 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
  */
 - (BOOL)saveList:(NSArray *)dataList {
     return [self saveOrUpdateList:dataList];
+}
+
+/**
+ *  添加多条数据，该方法实际调用的是saveOrUpdateList:
+ *  返回值是字典，字典里有5个字段，success：是否保存成功
+ *  newAddNum：新增几条，updateNum：更新几条，
+ *  newAddIds：[]，新增的主键，updateIds：[]，更新的主键
+ *
+ *  @param dataList 数据数组
+ *
+ *  @return 返回字典
+ */
+- (NSDictionary *)verboseSaveList:(NSArray *)dataList {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    [self saveOrUpdateList:dataList result:result];
+    return result;
 }
 
 /**
@@ -151,7 +193,7 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
- *  如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法
+ *  如果data里没有主键或者主键对应的数据不存在则新增，否则修改
  *
  *  @param data 数据对象
  *
@@ -166,7 +208,19 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
 }
 
 /**
- *  批量保存数据，如果data里没有主键或者主键对应的数据不存在则调用save，否则调用update方法
+ *  如果data里没有主键或者主键对应的数据不存在则新增，否则修改
+ *
+ *  @param data     数据对象
+ *  @param result   保存结果
+ */
+- (void)saveOrUpdate:(NSDictionary *)data result:(NSMutableDictionary *)result {
+    [[self dbQueue] inDatabase:^(FMDatabase *db) {
+        [self saveOrUpdate:data withDb:db result:result];
+    }];
+}
+
+/**
+ *  批量保存数据，如果data里没有主键或者主键对应的数据不存在则新增，否则修改
  *
  *  @param dataList 数据数组
  *
@@ -184,6 +238,49 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
         }
     }];
     return success;
+}
+
+/**
+ *  批量保存数据，如果data里没有主键或者主键对应的数据不存在则新增，否则修改
+ *
+ *  @param dataList 数据数组
+ *  @param result   保存结果
+ */
+- (void)saveOrUpdateList:(NSArray *)dataList result:(NSMutableDictionary *)result {
+    [self clearResult:result];
+    [[self dbQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSMutableDictionary *inResult = [NSMutableDictionary dictionary];
+        for (NSDictionary *data in dataList) {
+            [inResult removeAllObjects]; // 清空字典
+            [self saveOrUpdate:data withDb:db result:inResult];
+            if (![inResult[kSuccessKey] boolValue]) { // 只要有一条失败则回滚
+                [self clearResult:result];
+                *rollback = YES;
+                return;
+            }
+            
+            NSString *idValue = inResult[kIdValueKey]; // 主键
+            if ([inResult[kNewAddKey] boolValue]) { // 新增
+                result[kNewAddNumKey] = @([result[kNewAddNumKey] integerValue] + 1);
+                [result[kNewAddIdsKey] addObject:idValue];
+            } else { // 更新
+                result[kUpdateNumKey] = @([result[kUpdateNumKey] integerValue] + 1);
+                [result[kUpdateIdsKey] addObject:idValue];
+            }
+        }
+        
+        // 保存成功
+        result[kSuccessKey] = @YES;
+    }];
+}
+
+// 初始化返回字典
+- (void)clearResult:(NSMutableDictionary *)result {
+    result[kSuccessKey] = @NO;
+    result[kNewAddNumKey] = @0;
+    result[kUpdateNumKey] = @0;
+    result[kNewAddIdsKey] = [NSMutableArray array];
+    result[kUpdateIdsKey] = [NSMutableArray array];
 }
 
 /**
@@ -675,19 +772,60 @@ static NSString * const kDynamicTablePrefix = @"__DYNAMIC_TABLE_";  // 动态表
     NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
     NSString *keyName = [[tableDef objectForKey:@"key"] uppercaseString];
     BOOL update = NO; // 是否是update
+    NSString *idValue = data[keyName];
     if (data[keyName]) {
-        if ([self queryById:data[keyName] withDb:db]) {
+        if ([self queryById:idValue withDb:db]) {
             update = YES;
         }
     }
     
     BOOL success = NO;
     if (update) {
-        success = [self update:data byId:data[keyName] withDb:db];
+        success = [self update:data byId:idValue withDb:db];
     } else {
         success = [self save:data withDb:db];
     }
+    
     return success;
+}
+
+/**
+ *  使用指定FMDatabase对象保存或更新数据
+ *  返回值是字典，字典里有两个字段，一个是success：是否保存成功
+ *  newAdd：是否是新增，这两个值都是布尔值
+ *
+ *  @param data     数据对象
+ *  @param db       FMDatabase对象
+ *  @param result   保存结果
+ */
+- (void)saveOrUpdate:(NSDictionary *)data
+              withDb:(FMDatabase *)db
+              result:(NSMutableDictionary *)result {
+    
+    NSDictionary *tableDef = [[self tablesDef] objectForKey:[self.table uppercaseString]];
+    NSString *keyName = [[tableDef objectForKey:@"key"] uppercaseString];
+    BOOL update = NO; // 是否是update
+    NSString *idValue = data[keyName];
+    if (data[keyName]) {
+        if ([self queryById:idValue withDb:db]) {
+            update = YES;
+        }
+    }
+    
+    BOOL success = NO;
+    if (update) {
+        success = [self update:data byId:idValue withDb:db];
+    } else {
+        success = [self save:data withDb:db];
+    }
+    
+    if (result) {
+        if (success) { // 如果失败则不返回新增字段
+            result[kNewAddKey] = @(!update);
+        }
+        result[kSuccessKey] = @(success);
+        result[kIdValueKey] = idValue;
+    }
 }
 
 /**

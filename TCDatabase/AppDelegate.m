@@ -44,8 +44,14 @@
         NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
         NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
         NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
+        NSDictionary *user5 = @{@"USER_CODE":@"mazi222", @"USER_NAME":@"麻子222", @"USER_SEX":@"女"};
         
-       [userDAO saveList:@[user1, user2, user3, user4]];
+        NSDictionary *result = [userDAO verboseSaveList:@[user1, user2, user3, user4, user5]];
+        NSLog(@"%@", result);
+        
+        NSDictionary *user6 = @{@"USER_CODE":@"mazi222666", @"USER_NAME":@"麻子222", @"USER_SEX":@"女"};
+        result = [userDAO verboseSave:user6];
+        NSLog(@"%@", result);
     });
     
     TCSqlBean *sqlBean = [TCSqlBean instance];

@@ -1041,9 +1041,7 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  * 处理下需要保存的字段值
  */
 - (NSString *)cleanColumnValue:(NSString *)value {
-    if ([value isKindOfClass:[NSString class]] && [value containsString:@"'"]) { // 处理单引号
-        value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
-    } else if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) { // 对象序列化
+    if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) { // 对象序列化
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
                                                            options:NSJSONWritingPrettyPrinted
@@ -1293,7 +1291,8 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  *  @param value 值
  */
 - (void)andLike:(NSString *)field value:(NSString *)value {
-    [self andWhere:field op:@"like" value:value];
+    value = [self escapeKeyword:value];
+    [self andWhere:field op:@"like" value:[NSString stringWithFormat:@"%%%@%%", value]];
 }
 
 /**
@@ -1303,7 +1302,8 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  *  @param value 值
  */
 - (void)andNotLike:(NSString *)field value:(NSString *)value {
-    [self andWhere:field op:@"not like" value:value];
+    value = [self escapeKeyword:value];
+    [self andWhere:field op:@"not like" value:[NSString stringWithFormat:@"%%%@%%", value]];
 }
 
 /**
@@ -1315,11 +1315,35 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  */
 - (void)andWhere:(NSString *)field op:(NSString *)op value:(NSString *)value {
     if (field && op && value) { // 三个参数都不为nil时才拼接where条件
-        [[self where] appendString:[NSString stringWithFormat:@" and %@ %@ ?", field, op]];
+        if ([op containsString:@"like"] || [op containsString:@"not like"]) {
+            [[self where] appendString:[NSString stringWithFormat:@" and %@ %@ ? escape '/' ", field, op]];
+        } else {
+            [[self where] appendString:[NSString stringWithFormat:@" and %@ %@ ?", field, op]];
+        }
         [[self vars] addObject:value];
     } else {
         NSLog(@"andWhere:op:value出错：%@-%@-%@", field, op, value);
     }
+}
+
+/**
+ *  转义特殊字符
+ *
+ *  @param keyword 查询关键字
+ *
+ *  @return 过滤之后的关键字
+ */
+- (NSString *)escapeKeyword:(NSString *)keyword {
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"/" withString:@"//"];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"'" withString:@"/'"];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"[" withString:@"/["];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"]" withString:@"/]"];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"%" withString:@"/%"];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"&" withString:@"/&"];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"_" withString:@"/_"];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@"(" withString:@"/("];
+    keyword = [keyword stringByReplacingOccurrencesOfString:@")" withString:@"/)"];
+    return keyword;
 }
 
 /**
@@ -1462,7 +1486,8 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  *  @param value 值
  */
 - (void)orLike:(NSString *)field value:(NSString *)value {
-    [self orWhere:field op:@"like" value:value];
+    value = [self escapeKeyword:value];
+    [self orWhere:field op:@"like" value:[NSString stringWithFormat:@"%%%@%%", value]];
 }
 
 /**
@@ -1472,7 +1497,8 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  *  @param value 值
  */
 - (void)orNotLike:(NSString *)field value:(NSString *)value {
-    [self orWhere:field op:@"not like" value:value];
+    value = [self escapeKeyword:value];
+    [self orWhere:field op:@"not like" value:[NSString stringWithFormat:@"%%%@%%", value]];
 }
 
 /**
@@ -1484,7 +1510,11 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  */
 - (void)orWhere:(NSString *)field op:(NSString *)op value:(NSString *)value {
     if (field && op && value) { // 三个参数都不为nil时才拼接where条件
-        [[self where] appendString:[NSString stringWithFormat:@" or %@ %@ ?", field, op]];
+        if ([op containsString:@"like"] || [op containsString:@"not like"]) {
+            [[self where] appendString:[NSString stringWithFormat:@" or %@ %@ ? escape '/' ", field, op]];
+        } else {
+            [[self where] appendString:[NSString stringWithFormat:@" or %@ %@ ?", field, op]];
+        }
         [[self vars] addObject:value];
     } else {
         NSLog(@"orWhere:op:value出错：%@-%@-%@", field, op, value);

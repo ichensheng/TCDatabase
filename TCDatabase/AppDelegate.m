@@ -40,11 +40,11 @@
     
 
     dispatch_async(TCDatabaseDAO.workQueue, ^{
-        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三", @"USER_SEX":@"男"};
+        NSDictionary *user1 = @{@"USER_CODE":@"zhangsan", @"USER_NAME":@"张三%", @"USER_SEX":@"男"};
         NSDictionary *user2 = @{@"USER_CODE":@"lisi", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
-        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"李四", @"USER_SEX":@"男"};
-        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子", @"USER_SEX":@"男"};
-        NSDictionary *user5 = @{@"USER_CODE":@"mazi222", @"USER_NAME":@"麻子222", @"USER_SEX":@"女"};
+        NSDictionary *user3 = @{@"USER_CODE":@"wanger", @"USER_NAME":@"李四_", @"USER_SEX":@"男"};
+        NSDictionary *user4 = @{@"USER_CODE":@"mazi", @"USER_NAME":@"麻子'", @"USER_SEX":@"男"};
+        NSDictionary *user5 = @{@"USER_CODE":@"mazi222", @"USER_NAME":@"麻子222]", @"USER_SEX":@"女"};
         
         NSDictionary *result = [userDAO verboseSaveList:@[user1, user2, user3, user4, user5]];
         NSLog(@"%@", result);
@@ -55,7 +55,13 @@
     });
     
     TCSqlBean *sqlBean = [TCSqlBean instance];
-    [userDAO count:sqlBean];
+//    [sqlBean andEQ:@"USER_NAME" value:@"张三'"];
+//    [sqlBean andLike:@"USER_NAME" value:@"_"];
+//    [sqlBean orLike:@"USER_NAME" value:@"%"];
+//    [sqlBean andLike:@"USER_NAME" value:@"'"];
+//    [sqlBean orLike:@"USER_NAME" value:@"]"];
+    NSArray *results = [userDAO query:sqlBean];
+    NSLog(@"数据条数：%@", results);
     
     return YES;
 }

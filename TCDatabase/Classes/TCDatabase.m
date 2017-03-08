@@ -163,6 +163,7 @@ static FMStopWordTokenizer *stopTok;
                 [db installTokenizerModuleWithName:kTokenizerModuleName];
 #ifdef DEBUG
                 db.traceExecution = YES;
+                db.logsErrors = YES;
                 db.crashOnErrors = YES;
 #endif
             }];

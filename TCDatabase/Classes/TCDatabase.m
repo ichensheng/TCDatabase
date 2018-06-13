@@ -728,7 +728,7 @@ static FMStopWordTokenizer *stopTok;
             NSArray *columnNames = index[@"columns"];
             NSString *indexName = index[@"name"];
             NSString *existsIndexSql =
-            [NSString stringWithFormat:@"SELECT count(*) as 'count' FROM sqlite_master WHERE type='index' and name='%@'", indexName];
+            [NSString stringWithFormat:@"SELECT count(1) as 'count' FROM sqlite_master WHERE type='index' and name='%@'", indexName];
             FMResultSet *rs = [db executeQuery:existsIndexSql];
             BOOL ifExists = NO;
             while ([rs next]) {

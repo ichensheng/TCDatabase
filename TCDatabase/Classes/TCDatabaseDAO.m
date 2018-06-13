@@ -1097,7 +1097,7 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
  *  @return 查询语句
  */
 - (NSString *)countSqlFromSqlBean:(TCSqlBean *)sqlBean {
-    NSMutableString *countSql = [NSMutableString stringWithFormat:@"select count(*) as count from %@ where 1=1", self.table];
+    NSMutableString *countSql = [NSMutableString stringWithFormat:@"select count(1) as count from %@ where 1=1", self.table];
     if (!sqlBean) {
         return countSql;
     }
@@ -1347,7 +1347,7 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
 }
 
 /**
- *  增加'In'过滤项
+ *  增加'in'过滤项
  *
  *  @param field  字段
  *  @param values 值
@@ -1691,11 +1691,11 @@ static NSString * const kIdValueKey = @"idValue";       // 数据主键
 }
 
 /**
- *  构造'In'条件
+ *  构造'in'条件
  *
- *  @param values In的值
+ *  @param values in的值
  *
- *  @return In语句
+ *  @return in语句
  */
 - (NSString *)preIn:(NSArray *)values {
     NSMutableString *mutableString = [NSMutableString string];
